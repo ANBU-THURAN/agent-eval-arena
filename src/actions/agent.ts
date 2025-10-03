@@ -5,7 +5,8 @@ import {Agent} from "@/types/agent-types";
 
 export const createAgent = async (agent:Agent) => {
     await db.insert(agents).values({
-        name: agent.name
+        name: agent.name,
+        wealth: agent.wealth
     });
 }
 
@@ -84,5 +85,37 @@ export const getCurrentState = async (agentId: number) => {
         ...agent,
         products: productsWithQty,
     };
+};
+
+
+export const addWealthToAgent = async (agentId: number, amount: number) => {
+    const existing = await getAgent(agentId);
+    if (!existing) return null;
+
+    const newWealth = existing.wealth + amount;
+
+    await db
+        .update(agents)
+        .set({ wealth: newWealth })
+        .where(eq(agents.id, agentId));
+
+    return { ...existing, wealth: newWealth };
+};
+
+
+export const removeWealthFromAgent = async (agentId: number, amount: number) => {
+    const existing = await getAgent(agentId);
+    if (!existing) return null;
+
+    const newWealth = existing.wealth - amount;
+
+    if(newWealth < 0) throw new Error("cannot remove wealth");
+
+    await db
+        .update(agents)
+        .set({ wealth: newWealth })
+        .where(eq(agents.id, agentId));
+
+    return { ...existing, wealth: newWealth };
 };
 

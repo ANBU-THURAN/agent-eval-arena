@@ -3,8 +3,8 @@ import {db} from "@/db";
 import {proposal as proposals} from "@/db/schema";
 import {CreateProposal, Proposal} from "@/types/proposal-types";
 
-export const createProposal = async (proposal:CreateProposal) => {
-    const toCreate:Proposal = {
+export const createProposal = async (proposal: CreateProposal) => {
+    const toCreate: Proposal = {
         fromAgentId: proposal.fromAgentId,
         toAgentId: proposal.toAgentId,
         productId: proposal.productId,
@@ -73,6 +73,22 @@ export const changeProposalStatus = async (
         })
         .where(eq(proposals.id, proposalId));
 
-    return { ...existing, status, message };
+    return {...existing, status, message};
+};
+
+export const getTransactions = async (agentId: number) => {
+    return db
+        .select()
+        .from(proposals)
+        .where(
+            and(
+                eq(proposals.status, "accepted"),
+                or(
+                    eq(proposals.fromAgentId, agentId),
+                    eq(proposals.toAgentId, agentId)
+                )
+            )
+        )
+        .all();
 };
 

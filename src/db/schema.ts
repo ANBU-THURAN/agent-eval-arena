@@ -3,7 +3,8 @@ import { sqliteTable, integer, text, real } from "drizzle-orm/sqlite-core";
 // Agents table
 export const agent = sqliteTable("agent", {
     id: integer("id").primaryKey({ autoIncrement: true }),
-    name: text("name").notNull()
+    name: text("name").notNull(),
+    wealth: integer("wealth").notNull(),
 });
 
 // Products table
