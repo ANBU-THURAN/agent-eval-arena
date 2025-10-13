@@ -19,23 +19,6 @@ import {CreateProposal} from "@/types/proposal-types";
 import {getProduct} from "@/actions/products";
 import {tool} from "@langchain/core/tools"
 
-export const computeTool = tool(
-    ({ a, b }: { a: number; b: number }): number => {
-        /**
-         * Multiply a and b.
-         */
-        return a * b;
-    },
-    {
-        name: "compute",
-        description: "computes result of two numbers",
-        schema: z.object({
-            a: z.number(),
-            b: z.number(),
-        }),
-    }
-);
-
 export const getCurrentStateTool = new DynamicTool({
     name: "get_my_current_state",
     description: "Get the current state of yourself by providing your id, result includes your details and the products you own along with quantities.",
