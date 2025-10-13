@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.17",
     "@langchain/google-genai": "^0.2.18",
     "@libsql/client": "^0.15.15",
+    "ai": "^5.0.60",
     "better-sqlite3": "^12.4.1",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.5",

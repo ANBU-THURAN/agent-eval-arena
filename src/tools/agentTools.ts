@@ -17,6 +17,24 @@ import {
 import { z } from "zod";
 import {CreateProposal} from "@/types/proposal-types";
 import {getProduct} from "@/actions/products";
+import {tool} from "@langchain/core/tools"
+
+export const computeTool = tool(
+    ({ a, b }: { a: number; b: number }): number => {
+        /**
+         * Multiply a and b.
+         */
+        return a * b;
+    },
+    {
+        name: "compute",
+        description: "computes result of two numbers",
+        schema: z.object({
+            a: z.number(),
+            b: z.number(),
+        }),
+    }
+);
 
 export const getCurrentStateTool = new DynamicTool({
     name: "get_my_current_state",
@@ -181,15 +199,17 @@ export const sendProposalToAgentTool = new DynamicStructuredTool({
 export const getProductTool = new DynamicTool({
     name: "get_product_details",
     description:
-        "get the details of a product by providing it's details",
+        "get the details of a product by providing it's ID",
     func: async (input: string) => {
         try {
             const productId = parseInt(input);
+            console.log(productId);
             if (isNaN(productId)) {
                 throw new Error("Invalid productId. Please provide a valid number.");
             }
 
             const product = await getProduct(productId);
+            console.log(product);
             return JSON.stringify(product, null, 2);
         } catch (err: any) {
             return `Error: ${err.message}`;

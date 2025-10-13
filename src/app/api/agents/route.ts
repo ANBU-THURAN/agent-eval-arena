@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import {BasePromptTemplate, ChatPromptTemplate, SystemMessagePromptTemplate} from "@langchain/core/prompts";
-import {callAgent} from "@/model/agent-executor";
-import {getCurrentStateOfAgentsTool} from "@/tools/agentTools";
+import { callAgent } from "@/model/agent-executor";
+import { getProductTool } from "@/tools/agentTools";
 
+// Example: GET /api/agents
 export async function GET() {
     try {
-        const systemPrompt = ChatPromptTemplate.fromTemplate(
-            "You are an intelligent agent. You have access to the following tools: {tools} {tool_names}.\nUse them wisely.\n\n{agent_scratchpad}"
-        );
-        const output = await callAgent(systemPrompt, [getCurrentStateOfAgentsTool]);
-        console.log(output);
+        const userQuery = "What are the details for product 1?";
+        const result = await callAgent([getProductTool], userQuery);
 
-        return NextResponse.json("nothing");
+        console.log("Agent Output:", result.output);
+        console.log("Steps:", result.intermediateSteps);
+
+        return Response.json({
+            result: result.output,
+            steps: result.intermediateSteps
+        });
     } catch (error: any) {
-        console.error("Error fetching Gemini response:", error);
-        return NextResponse.json({ error: "Failed to get response from Gemini" }, { status: 500 });
+        console.error("Error:", error);
+        return Response.json(
+            { error: error.message },
+            { status: 500 }
+        );
     }
 }
