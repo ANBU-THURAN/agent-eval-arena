@@ -24,15 +24,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Debug - List backend files
+        run: |
+          echo "Listing backend directory:"
+          ls -la backend/
+          echo ""
+          echo "Listing backend/src directory:"
+          ls -la backend/src/ || echo "backend/src directory not found"
+          echo ""
+          echo "Counting TypeScript files:"
+          find backend/src -name "*.ts" -type f | wc -l || echo "No TS files found"
+
       - name: Run tests
         run: npm test --workspace=backend
         continue-on-error: true
 
       - name: Build backend
-        run: npm run build --workspace=backend
+        run: npm run build
+        working-directory: backend
 
       - name: Build frontend
-        run: npm run build --workspace=frontend
+        run: npm run build
+        working-directory: frontend
 
   deploy:
     needs: test
