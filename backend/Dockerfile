@@ -28,6 +28,7 @@ RUN npm install --omit=dev
 # Copy built backend and shared types
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/shared ./shared
+COPY drizzle ./drizzle
 
 # Create data directory for SQLite
 RUN mkdir -p /app/data
