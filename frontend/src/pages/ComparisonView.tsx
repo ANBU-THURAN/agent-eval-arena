@@ -41,7 +41,7 @@ export default function ComparisonView() {
 
   // Fetch all agents
   useEffect(() => {
-    fetch('http://localhost:3000/api/agents')
+    fetch('http://localhost:8080/api/agents')
       .then((res) => res.json())
       .then((data) => setAgents(data))
       .catch((err) => console.error('Failed to fetch agents:', err));
@@ -49,7 +49,7 @@ export default function ComparisonView() {
 
   // Fetch current session
   useEffect(() => {
-    fetch('http://localhost:3000/api/sessions/current')
+    fetch('http://localhost:8080/api/sessions/current')
       .then((res) => res.json())
       .then((data) => {
         if (data.session) {
@@ -77,7 +77,7 @@ export default function ComparisonView() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/agents/comparison', {
+      const response = await fetch('http://localhost:8080/api/agents/comparison', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

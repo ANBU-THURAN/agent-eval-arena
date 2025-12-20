@@ -58,7 +58,7 @@ export default function LiveTradingView() {
     fetchSessionStatus();
 
     // Connect to WebSocket
-    const ws = new WebSocket('ws://localhost:3000/ws');
+    const ws = new WebSocket('ws://localhost:8080/ws');
 
     ws.onopen = () => {
       console.log('WebSocket connected');
