@@ -12,7 +12,6 @@ RUN npm install
 
 # Copy frontend source
 COPY src ./src
-COPY public ./public
 COPY index.html ./
 COPY tsconfig.json ./
 COPY tsconfig.node.json ./
