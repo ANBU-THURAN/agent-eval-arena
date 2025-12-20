@@ -26,7 +26,10 @@ export class SessionService {
     const sessions = await db.query.sessions.findMany({
       orderBy: [desc(schema.sessions.startTime)],
     });
-    return sessions;
+    return sessions.map(s => ({
+      ...s,
+      status: s.status as 'scheduled' | 'active' | 'completed'
+    }));
   }
 
   /**
@@ -42,7 +45,10 @@ export class SessionService {
       throw new NotFoundError(`Session ${sessionId} not found`);
     }
 
-    return session;
+    return {
+      ...session,
+      status: session.status as 'scheduled' | 'active' | 'completed'
+    };
   }
 
   /**
@@ -58,7 +64,10 @@ export class SessionService {
     if (activeSession) {
       return {
         type: 'active',
-        session: activeSession,
+        session: {
+          ...activeSession,
+          status: activeSession.status as 'scheduled' | 'active' | 'completed'
+        },
       };
     }
 
@@ -71,7 +80,10 @@ export class SessionService {
     if (scheduledSession) {
       return {
         type: 'scheduled',
-        session: scheduledSession,
+        session: {
+          ...scheduledSession,
+          status: scheduledSession.status as 'scheduled' | 'active' | 'completed'
+        },
       };
     }
 
@@ -105,6 +117,9 @@ export class SessionService {
       throw new NotFoundError('No active session found');
     }
 
-    return activeSession;
+    return {
+      ...activeSession,
+      status: activeSession.status as 'scheduled' | 'active' | 'completed'
+    };
   }
 }

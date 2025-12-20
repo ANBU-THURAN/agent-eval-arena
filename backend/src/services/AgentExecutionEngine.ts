@@ -301,26 +301,30 @@ export class AgentExecutionEngine {
     try {
       switch (functionName) {
         case 'makeProposal':
+          const makeArgs = args as MakeProposalArgs;
           return await tools.makeProposal(
-            args.toAgentId,
-            args.goodName,
-            args.quantity,
-            args.price,
-            args.explanation
+            makeArgs.toAgentId,
+            makeArgs.goodName,
+            makeArgs.quantity,
+            makeArgs.price,
+            makeArgs.explanation
           );
 
         case 'acceptProposal':
-          return await tools.acceptProposal(args.proposalId, args.explanation);
+          const acceptArgs = args as AcceptProposalArgs;
+          return await tools.acceptProposal(acceptArgs.proposalId, acceptArgs.explanation);
 
         case 'rejectProposal':
-          return await tools.rejectProposal(args.proposalId, args.explanation);
+          const rejectArgs = args as RejectProposalArgs;
+          return await tools.rejectProposal(rejectArgs.proposalId, rejectArgs.explanation);
 
         case 'counterProposal':
+          const counterArgs = args as CounterProposalArgs;
           return await tools.counterProposal(
-            args.proposalId,
-            args.quantity,
-            args.price,
-            args.explanation
+            counterArgs.proposalId,
+            counterArgs.quantity,
+            counterArgs.price,
+            counterArgs.explanation
           );
 
         case 'getAgentStates':

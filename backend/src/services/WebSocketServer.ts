@@ -30,10 +30,13 @@ export interface RoundStartPayload {
 
 export interface ProposalPayload {
   id: string;
-  roundId: string;
-  fromAgentId: string;
-  toAgentId: string;
-  goodId: string;
+  roundId?: string;
+  fromAgentId?: string;
+  toAgentId?: string;
+  goodId?: string;
+  fromAgentName?: string;
+  toAgentName?: string;
+  goodName?: string;
   quantity: number;
   price: number;
   explanation: string;
@@ -43,14 +46,17 @@ export interface ProposalPayload {
 
 export interface TradePayload {
   id: string;
-  proposalId: string;
-  sessionId: string;
-  fromAgentId: string;
-  toAgentId: string;
-  goodId: string;
+  proposalId?: string;
+  sessionId?: string;
+  fromAgentId?: string;
+  toAgentId?: string;
+  goodId?: string;
+  fromAgentName?: string;
+  toAgentName?: string;
+  goodName?: string;
   quantity: number;
   price: number;
-  settledAt: Date;
+  settledAt?: Date;
 }
 
 export interface AgentStatePayload {
