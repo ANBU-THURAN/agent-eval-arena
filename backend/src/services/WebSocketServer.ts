@@ -1,5 +1,5 @@
 import { WebSocketServer as WSServer, WebSocket } from 'ws';
-import { Server as HTTPServer } from 'http';
+import { Server as HTTPServer, IncomingMessage } from 'http';
 
 export enum WSEventType {
   COUNTDOWN_TICK = 'countdown_tick',
@@ -94,8 +94,19 @@ export class WebSocketServer {
   private clients: Set<WebSocket> = new Set();
   private sessionScheduler: ISessionScheduler | null = null;
 
+  // Define allowed origins for WebSocket
+  private allowedOrigins = [
+    'http://localhost:5173',
+    'https://skillful-cat-production.up.railway.app',
+    'https://agent-eval-arena-production.up.railway.app',
+  ];
+
   constructor(server: HTTPServer) {
-    this.wss = new WSServer({ server, path: '/ws' });
+    this.wss = new WSServer({
+      server,
+      path: '/ws',
+      verifyClient: (info) => this.verifyClient(info),
+    });
 
     this.wss.on('connection', (ws: WebSocket) => {
       console.log('New WebSocket client connected');
@@ -130,6 +141,21 @@ export class WebSocketServer {
     });
 
     console.log('WebSocket server initialized');
+  }
+
+  private verifyClient(info: { origin: string; req: IncomingMessage }): boolean {
+    const origin = info.origin || info.req.headers.origin;
+
+    // Allow connections with no origin (for testing)
+    if (!origin) return true;
+
+    // Check if origin is in allowed list
+    if (this.allowedOrigins.includes(origin)) {
+      return true;
+    }
+
+    console.warn(`WebSocket connection rejected from origin: ${origin}`);
+    return false;
   }
 
   setSessionScheduler(scheduler: ISessionScheduler) {
