@@ -37,17 +37,13 @@ const corsOptions = {
 };
 
 // Middleware
-app.use(cors({
-  origin: true,
-  credentials: true,
-}));
-app.options('*', cors());
+app.use(cors(corsOptions));
+
 
 app.use(express.json());
 
 
 // Health check
-app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
