@@ -105,7 +105,7 @@ export class WebSocketServer {
     this.wss = new WSServer({
       server,
       path: '/ws',
-      verifyClient: (info) => this.verifyClient(info),
+      verifyClient: (info: { origin: string; req: IncomingMessage }) => this.verifyClient(info),
     });
 
     this.wss.on('connection', (ws: WebSocket) => {
