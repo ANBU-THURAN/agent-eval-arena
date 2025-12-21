@@ -42,6 +42,8 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
+app.get('/health', (req, res) => {})
+
 
 // Health check
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
