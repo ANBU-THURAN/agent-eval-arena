@@ -28,7 +28,7 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(null, false);
     }
   },
   credentials: true,
@@ -37,9 +37,14 @@ const corsOptions = {
 };
 
 // Middleware
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
+app.options('*', cors());
+
 app.use(express.json());
+
 
 // Health check
 app.get('/health', (req, res) => {
