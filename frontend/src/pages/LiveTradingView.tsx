@@ -139,13 +139,16 @@ export default function LiveTradingView() {
 
   const handleManualStart = async () => {
     try {
+
+      console.log(`Backend url: ${API_BASE_URL}`);
+      
       const response = await fetch(`${API_BASE_URL}/sessions/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
+      
       const data = await response.json();
 
       if (response.ok) {
