@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AgentCard from '../components/AgentCard';
 import ProposalFeed from '../components/ProposalFeed';
+import { API_BASE_URL, WS_URL } from '../config';
 
 interface Agent {
   id: string;
@@ -58,7 +59,7 @@ export default function LiveTradingView() {
     fetchSessionStatus();
 
     // Connect to WebSocket
-    const ws = new WebSocket('ws://localhost:8080/ws');
+    const ws = new WebSocket(WS_URL);
 
     ws.onopen = () => {
       console.log('WebSocket connected');
@@ -96,12 +97,12 @@ export default function LiveTradingView() {
     try {
       // If session ID is provided, fetch agent states for that session
       if (sessionId) {
-        const response = await fetch(`/api/agents/states/${sessionId}`);
+        const response = await fetch(`${API_BASE_URL}/agents/states/${sessionId}`);
         const data = await response.json();
         setAgents(data);
       } else {
         // Otherwise fetch basic agent info with default values
-        const response = await fetch('/api/agents');
+        const response = await fetch(`${API_BASE_URL}/agents`);
         const data = await response.json();
         setAgents(
           data.map((agent: any) => ({
@@ -120,7 +121,7 @@ export default function LiveTradingView() {
 
   const fetchSessionStatus = async () => {
     try {
-      const response = await fetch('/api/sessions/current');
+      const response = await fetch(`${API_BASE_URL}/sessions/current`);
       const data = await response.json();
 
       if (data.type === 'active' && data.session) {
@@ -138,7 +139,7 @@ export default function LiveTradingView() {
 
   const handleManualStart = async () => {
     try {
-      const response = await fetch('/api/sessions/start', {
+      const response = await fetch(`${API_BASE_URL}/sessions/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -166,7 +167,7 @@ export default function LiveTradingView() {
 
   const handlePause = async () => {
     try {
-      const response = await fetch('/api/sessions/pause', { method: 'POST' });
+      const response = await fetch(`${API_BASE_URL}/sessions/pause`, { method: 'POST' });
       if (response.ok) {
         setIsPaused(true);
       }
@@ -177,7 +178,7 @@ export default function LiveTradingView() {
 
   const handleResume = async () => {
     try {
-      const response = await fetch('/api/sessions/resume', { method: 'POST' });
+      const response = await fetch(`${API_BASE_URL}/sessions/resume`, { method: 'POST' });
       if (response.ok) {
         setIsPaused(false);
       }
@@ -188,7 +189,7 @@ export default function LiveTradingView() {
 
   const fetchProposals = async (sessionId: string) => {
     try {
-      const response = await fetch(`/api/proposals/${sessionId}`);
+      const response = await fetch(`${API_BASE_URL}/proposals/${sessionId}`);
       const data = await response.json();
       setProposals(
         data.map((p: any) => ({

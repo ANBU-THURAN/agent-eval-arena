@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 interface LeaderboardEntry {
   agentId: string;
@@ -40,12 +41,12 @@ export default function LeaderboardView() {
   const fetchData = async () => {
     try {
       // Fetch all-time leaderboard
-      const leaderboardResponse = await fetch('/api/leaderboard/alltime');
+      const leaderboardResponse = await fetch(`${API_BASE_URL}/leaderboard/alltime`);
       const leaderboardData = await leaderboardResponse.json();
       setLeaderboard(leaderboardData);
 
       // Fetch all sessions
-      const sessionsResponse = await fetch('/api/sessions');
+      const sessionsResponse = await fetch(`${API_BASE_URL}/sessions`);
       const sessionsData = await sessionsResponse.json();
       // Filter completed sessions and sort by startTime descending (newest first)
       const completedSessions = sessionsData
@@ -56,7 +57,7 @@ export default function LeaderboardView() {
 
       // Fetch leaderboards for all sessions upfront
       const leaderboardPromises = completedSessions.map((session: Session) =>
-        fetch(`/api/leaderboard/daily/${session.id}`)
+        fetch(`${API_BASE_URL}/leaderboard/daily/${session.id}`)
           .then(res => res.json())
           .catch(() => []) // Return empty array on error
       );
@@ -86,7 +87,7 @@ export default function LeaderboardView() {
 
   const fetchSessionLeaderboard = async (sessionId: string) => {
     try {
-      const response = await fetch(`/api/leaderboard/daily/${sessionId}`);
+      const response = await fetch(`${API_BASE_URL}/leaderboard/daily/${sessionId}`);
       const data = await response.json();
       setSessionLeaderboards(prev => new Map(prev).set(sessionId, data));
     } catch (error) {

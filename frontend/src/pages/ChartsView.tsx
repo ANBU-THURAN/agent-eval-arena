@@ -16,6 +16,7 @@ import {
   Cell,
 } from 'recharts';
 import ChartCard from '../components/ChartCard';
+import { API_BASE_URL } from '../config';
 
 interface AgentPerformance {
   sessionDate: string;
@@ -91,7 +92,7 @@ export default function ChartsView() {
   const fetchChartsData = async () => {
     try {
       // Fetch all sessions
-      const sessionsResponse = await fetch('/api/sessions');
+      const sessionsResponse = await fetch(`${API_BASE_URL}/sessions`);
       const sessions: Session[] = await sessionsResponse.json();
       const completedSessions = sessions
         .filter((s) => s.status === 'completed')
@@ -100,7 +101,7 @@ export default function ChartsView() {
       setTotalSessions(completedSessions.length);
 
       // Fetch all agents to ensure chart shows all agents
-      const agentsResponse = await fetch('/api/agents');
+      const agentsResponse = await fetch(`${API_BASE_URL}/agents`);
       const agents = await agentsResponse.json();
       const allAgentNames = agents.map((agent: any) => agent.name);
       setAgentNames(allAgentNames);
@@ -108,7 +109,7 @@ export default function ChartsView() {
       console.log('🔍 Agent names count:', allAgentNames.length);
 
       // Fetch all-time leaderboard for win distribution
-      const leaderboardResponse = await fetch('/api/leaderboard/alltime');
+      const leaderboardResponse = await fetch(`${API_BASE_URL}/leaderboard/alltime`);
       const leaderboard: LeaderboardEntry[] = await leaderboardResponse.json();
 
       // Win distribution data
@@ -126,7 +127,7 @@ export default function ChartsView() {
 
         for (const session of completedSessions.slice(-10)) {
           // Last 10 sessions
-          const sessionLeaderboard = await fetch(`/api/leaderboard/daily/${session.id}`).then((r) =>
+          const sessionLeaderboard = await fetch(`${API_BASE_URL}/leaderboard/daily/${session.id}`).then((r) =>
             r.json()
           );
 
@@ -156,11 +157,11 @@ export default function ChartsView() {
 
         // Trade volume by good (using most recent session)
         const latestSession = completedSessions[completedSessions.length - 1];
-        const tradesResponse = await fetch(`/api/trades/${latestSession.id}`);
+        const tradesResponse = await fetch(`${API_BASE_URL}/trades/${latestSession.id}`);
         const trades: Trade[] = await tradesResponse.json();
 
         // Fetch all goods to ensure we show all goods even if not traded
-        const goodsResponse = await fetch('/api/goods');
+        const goodsResponse = await fetch(`${API_BASE_URL}/goods`);
         const goods: Good[] = await goodsResponse.json();
 
         // Initialize volume map with all goods set to 0

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 interface Session {
   id: string;
@@ -28,7 +29,7 @@ export default function ArchiveView() {
 
   const fetchSessions = async () => {
     try {
-      const response = await fetch('/api/sessions');
+      const response = await fetch(`${API_BASE_URL}/sessions`);
       const data = await response.json();
       setSessions(
         data.map((s: any) => ({
@@ -46,7 +47,7 @@ export default function ArchiveView() {
 
   const fetchTrades = async (sessionId: string) => {
     try {
-      const response = await fetch(`/api/trades/${sessionId}`);
+      const response = await fetch(`${API_BASE_URL}/trades/${sessionId}`);
       const data = await response.json();
       const tradesData = data.map((t: any) => ({
         ...t,
