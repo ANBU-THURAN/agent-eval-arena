@@ -3,6 +3,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Accept build arguments from Railway
+ARG VITE_API_URL
+ARG VITE_WS_URL
+
+# Make them available as environment variables during build
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_WS_URL=${VITE_WS_URL}
+
 # Copy package files
 COPY package.json ./
 COPY shared ./shared
@@ -16,9 +24,8 @@ COPY index.html ./
 COPY tsconfig.json ./
 COPY tsconfig.node.json ./
 COPY vite.config.ts ./
-COPY .env.production ./
 
-# Build frontend
+# Build frontend (env vars are now available)
 RUN npm run build
 
 # Production stage - serve with nginx
