@@ -167,7 +167,7 @@ export default function LeaderboardView() {
                 fontSize: 'var(--text-2xl)',
                 fontWeight: 'var(--weight-bold)',
                 fontFamily: 'var(--font-mono)',
-                color: 'var(--accent-cyan)',
+                color: 'var(--accent-orange)',
               }}
             >
               {sessions.length}
@@ -198,7 +198,7 @@ export default function LeaderboardView() {
                 fontSize: 'var(--text-2xl)',
                 fontWeight: 'var(--weight-bold)',
                 fontFamily: 'var(--font-mono)',
-                color: 'var(--accent-cyan)',
+                color: 'var(--accent-orange)',
               }}
             >
               {leaderboard.reduce((sum, e) => sum + e.totalTrades, 0)}
@@ -229,7 +229,7 @@ export default function LeaderboardView() {
                 fontSize: 'var(--text-2xl)',
                 fontWeight: 'var(--weight-bold)',
                 fontFamily: 'var(--font-mono)',
-                color: 'var(--accent-cyan)',
+                color: 'var(--accent-orange)',
               }}
             >
               {leaderboard.length}
@@ -409,7 +409,7 @@ export default function LeaderboardView() {
                         <span
                           style={{
                             display: 'inline-block',
-                            color: 'var(--accent-cyan)',
+                            color: 'var(--accent-orange)',
                             fontSize: 'var(--text-lg)',
                             transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
                             transition: 'transform var(--transition-base)',

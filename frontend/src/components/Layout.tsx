@@ -16,7 +16,7 @@ export default function Layout({ children }: LayoutProps) {
         style={{
           backgroundColor: 'var(--bg-secondary)',
           borderBottom: '1px solid var(--border)',
-          padding: '0.75rem 1.5rem',
+          padding: '0.5rem 1rem',
         }}
       >
         <div
@@ -101,7 +101,7 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main style={{ flex: 1, padding: '1.5rem' }}>
+      <main style={{ flex: 1, padding: '1rem' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>{children}</div>
       </main>
 
@@ -110,7 +110,7 @@ export default function Layout({ children }: LayoutProps) {
         style={{
           backgroundColor: 'var(--bg-secondary)',
           borderTop: '1px solid var(--border)',
-          padding: '0.75rem 1.5rem',
+          padding: '0.5rem 1rem',
           textAlign: 'center',
           color: 'var(--text-secondary)',
           fontSize: '0.875rem',

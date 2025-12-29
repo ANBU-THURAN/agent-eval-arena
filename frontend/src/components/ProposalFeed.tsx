@@ -191,9 +191,9 @@ export default function ProposalFeed({
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 'var(--weight-semibold)',
                     textTransform: 'uppercase',
-                    backgroundColor: filterMode === mode ? 'var(--accent-cyan)' : 'transparent',
+                    backgroundColor: filterMode === mode ? 'var(--accent-purple)' : 'transparent',
                     color: filterMode === mode ? 'var(--bg-primary)' : 'var(--text-secondary)',
-                    border: filterMode === mode ? '1px solid var(--accent-cyan)' : '1px solid var(--border-secondary)',
+                    border: filterMode === mode ? '1px solid var(--accent-teal)' : '1px solid var(--border-secondary)',
                     borderRadius: 'var(--radius-sm)',
                     cursor: 'pointer',
                     transition: 'all var(--transition-base)',
@@ -239,7 +239,7 @@ export default function ProposalFeed({
                 color: 'var(--text-secondary)',
               }}
             >
-              Showing <span style={{ color: 'var(--accent-cyan)', fontWeight: 'var(--weight-bold)' }}>{proposals.length}</span> of <span style={{ color: 'var(--text-primary)' }}>{allProposals.length}</span> proposals
+              Showing <span style={{ color: 'var(--accent-orange)', fontWeight: 'var(--weight-bold)' }}>{proposals.length}</span> of <span style={{ color: 'var(--text-primary)' }}>{allProposals.length}</span> proposals
             </div>
           )}
         </div>
@@ -276,7 +276,7 @@ export default function ProposalFeed({
                 onClick={() => toggleProposal(proposal.id)}
                 data-proposal-status={proposal.status}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderLeft = '4px solid var(--accent-cyan)';
+                  e.currentTarget.style.borderLeft = '4px solid var(--accent-orange)';
                   e.currentTarget.style.paddingLeft = 'calc(0.75rem - 3px)';
                 }}
                 onMouseLeave={(e) => {

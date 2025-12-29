@@ -136,7 +136,7 @@ export default function ComparisonView() {
           color: 'var(--text-secondary)',
         }}>
           <span style={{
-            backgroundColor: 'var(--accent-cyan)',
+            backgroundColor: 'var(--accent-purple)',
             color: 'var(--bg-primary)',
             padding: 'var(--space-1) var(--space-2)',
             borderRadius: 'var(--radius-sm)',
@@ -161,10 +161,10 @@ export default function ComparisonView() {
               style={{
                 padding: 'var(--space-2) var(--space-3)',
                 backgroundColor: selectedAgentIds.includes(agent.id)
-                  ? 'var(--accent-cyan)'
+                  ? 'var(--accent-purple)'
                   : 'var(--surface-01)',
                 border: selectedAgentIds.includes(agent.id)
-                  ? '1px solid var(--accent-cyan)'
+                  ? '1px solid var(--accent-teal)'
                   : '1px solid var(--border-secondary)',
                 borderRadius: 'var(--radius-sm)',
                 cursor: 'pointer',
@@ -198,7 +198,7 @@ export default function ComparisonView() {
             padding: 'var(--space-3) var(--space-4)',
             backgroundColor: selectedAgentIds.length < 2 || loading
               ? 'var(--surface-02)'
-              : 'var(--accent-cyan)',
+              : 'var(--accent-purple)',
             border: '1px solid var(--border-secondary)',
             borderRadius: 'var(--radius-sm)',
             cursor: selectedAgentIds.length < 2 || loading ? 'not-allowed' : 'pointer',
@@ -212,13 +212,13 @@ export default function ComparisonView() {
           }}
           onMouseEnter={(e) => {
             if (selectedAgentIds.length >= 2 && !loading) {
-              e.currentTarget.style.backgroundColor = 'var(--accent-cyan)';
+              e.currentTarget.style.backgroundColor = 'var(--accent-purple)';
               e.currentTarget.style.opacity = '0.9';
             }
           }}
           onMouseLeave={(e) => {
             if (selectedAgentIds.length >= 2 && !loading) {
-              e.currentTarget.style.backgroundColor = 'var(--accent-cyan)';
+              e.currentTarget.style.backgroundColor = 'var(--accent-purple)';
               e.currentTarget.style.opacity = '1';
             }
           }}

@@ -292,7 +292,7 @@ export default function ChartsView() {
               fontSize: 'var(--text-2xl)',
               fontWeight: 'var(--weight-bold)',
               fontFamily: 'var(--font-mono)',
-              color: 'var(--accent-cyan)',
+              color: 'var(--accent-orange)',
             }}
           >
             {totalSessions}
@@ -323,7 +323,7 @@ export default function ChartsView() {
               fontSize: 'var(--text-2xl)',
               fontWeight: 'var(--weight-bold)',
               fontFamily: 'var(--font-mono)',
-              color: 'var(--accent-cyan)',
+              color: 'var(--accent-orange)',
             }}
           >
             {totalTrades}
@@ -354,7 +354,7 @@ export default function ChartsView() {
               fontSize: 'var(--text-2xl)',
               fontWeight: 'var(--weight-bold)',
               fontFamily: 'var(--font-mono)',
-              color: 'var(--accent-cyan)',
+              color: 'var(--accent-orange)',
             }}
           >
             {agentNames.length}
@@ -514,7 +514,7 @@ export default function ChartsView() {
                     borderRadius: 'var(--radius-md)',
                   }}
                 />
-                <Bar dataKey="count" fill="var(--accent-cyan)" />
+                <Bar dataKey="count" fill="var(--accent-purple)" />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -568,8 +568,8 @@ export default function ChartsView() {
                 <Area
                   type="monotone"
                   dataKey="trades"
-                  stroke="var(--accent-cyan)"
-                  fill="var(--accent-cyan)"
+                  stroke="var(--accent-purple)"
+                  fill="var(--accent-purple)"
                   fillOpacity={0.3}
                 />
               </AreaChart>

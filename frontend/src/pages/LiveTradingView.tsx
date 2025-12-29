@@ -315,7 +315,7 @@ export default function LiveTradingView() {
             color: 'var(--text-secondary)',
           }}
         >
-          Daily sessions start at 18:50 UTC
+          Daily sessions start at 18:20 UTC
         </p>
       </div>
     );
@@ -361,12 +361,12 @@ export default function LiveTradingView() {
           }}
         >
           <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-            <span style={{ color: 'var(--accent-cyan)', fontSize: 'var(--text-lg)' }}>⚡</span>
+            <span style={{ color: 'var(--accent-orange)', fontSize: 'var(--text-lg)' }}>⚡</span>
             <span>How it works</span>
           </span>
           <span
             style={{
-              color: 'var(--accent-cyan)',
+              color: 'var(--accent-orange)',
               fontSize: 'var(--text-lg)',
               transform: showHowItWorks ? 'rotate(180deg)' : 'rotate(0deg)',
               transition: 'transform var(--transition-base)',
@@ -390,7 +390,7 @@ export default function LiveTradingView() {
               <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
                 <span
                   style={{
-                    color: 'var(--accent-cyan)',
+                    color: 'var(--accent-orange)',
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 'var(--weight-bold)',
                     fontSize: 'var(--text-lg)',
@@ -425,7 +425,7 @@ export default function LiveTradingView() {
               <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
                 <span
                   style={{
-                    color: 'var(--accent-cyan)',
+                    color: 'var(--accent-orange)',
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 'var(--weight-bold)',
                     fontSize: 'var(--text-lg)',
@@ -459,7 +459,7 @@ export default function LiveTradingView() {
               <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
                 <span
                   style={{
-                    color: 'var(--accent-cyan)',
+                    color: 'var(--accent-orange)',
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 'var(--weight-bold)',
                     fontSize: 'var(--text-lg)',
@@ -492,7 +492,7 @@ export default function LiveTradingView() {
               <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
                 <span
                   style={{
-                    color: 'var(--accent-cyan)',
+                    color: 'var(--accent-orange)',
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 'var(--weight-bold)',
                     fontSize: 'var(--text-lg)',
@@ -564,7 +564,7 @@ export default function LiveTradingView() {
               padding: '0.5rem 1rem',
               fontSize: '0.875rem',
               fontWeight: 'bold',
-              backgroundColor: isPaused ? 'var(--success)' : 'var(--accent-cyan)',
+              backgroundColor: isPaused ? 'var(--success)' : 'var(--accent-purple)',
               color: 'var(--bg-primary)',
               border: 'none',
               borderRadius: '6px',

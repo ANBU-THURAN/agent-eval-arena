@@ -230,11 +230,11 @@ export default function ArchiveView() {
                             fontWeight: 'var(--weight-semibold)',
                             textTransform: 'uppercase',
                             backgroundColor:
-                              filterMode === mode ? 'var(--accent-cyan)' : 'transparent',
+                              filterMode === mode ? 'var(--accent-purple)' : 'transparent',
                             color: filterMode === mode ? 'var(--bg-primary)' : 'var(--text-secondary)',
                             border:
                               filterMode === mode
-                                ? '1px solid var(--accent-cyan)'
+                                ? '1px solid var(--accent-teal)'
                                 : '1px solid var(--border-secondary)',
                             borderRadius: 'var(--radius-sm)',
                             cursor: 'pointer',
@@ -325,7 +325,7 @@ export default function ArchiveView() {
                             }}
                           >
                             <span>
-                              Showing <span style={{ color: 'var(--accent-cyan)', fontWeight: 'var(--weight-bold)' }}>{filteredTrades.length}</span> of <span style={{ color: 'var(--text-primary)' }}>{trades.length}</span> trades
+                              Showing <span style={{ color: 'var(--accent-orange)', fontWeight: 'var(--weight-bold)' }}>{filteredTrades.length}</span> of <span style={{ color: 'var(--text-primary)' }}>{trades.length}</span> trades
                             </span>
                             <span style={{ color: 'var(--text-tertiary)' }}>
                               Filter: {filterMode.toUpperCase()}

@@ -10,3 +10,6 @@ build/
 coverage/
 .vscode/
 .idea/
+backend/.env
+frontend/vite.config.ts
+frontend/src/config.ts
