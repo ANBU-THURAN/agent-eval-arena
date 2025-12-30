@@ -15,18 +15,16 @@ interface AgentCardProps {
 export default function AgentCard({ agent }: AgentCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [inventoryExpanded, setInventoryExpanded] = useState(false);
-  const tradeProgress = (agent.tradesCompleted / agent.tradesRequired) * 100;
   const metRequirement = agent.tradesCompleted >= agent.tradesRequired;
 
   return (
     <div
       style={{
         backgroundColor: 'var(--bg-secondary)',
-        border: metRequirement ? '1px solid var(--border)' : '2px solid var(--error)',
-        borderRadius: '8px',
-        padding: expanded ? '0.5rem' : '0.4rem',
-        transition: 'all 0.2s',
-        boxShadow: metRequirement ? 'none' : '0 0 10px var(--error-glow)',
+        border: metRequirement ? '1px solid var(--border-primary)' : '1px solid var(--semantic-error)',
+        borderRadius: 'var(--border-radius)',
+        padding: 'var(--space-sm)',
+        transition: 'all var(--transition)',
       }}
     >
       {/* Header - Always visible */}
@@ -39,19 +37,22 @@ export default function AgentCard({ agent }: AgentCardProps) {
           cursor: 'pointer',
         }}
       >
-        <h3 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: metRequirement ? 'inherit' : 'var(--error)' }}>
+        <h3 style={{
+          fontSize: 'var(--font-size-primary)',
+          fontWeight: 600,
+          color: metRequirement ? 'var(--text-primary)' : 'var(--semantic-error)',
+        }}>
           {agent.name}
-          {!metRequirement && ' ⚠️'}
         </h3>
-        <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+        <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
           {expanded ? '▼' : '▶'}
         </span>
       </div>
 
       {/* Expandable Details */}
       {expanded && (
-        <div style={{ marginTop: '0.5rem' }}>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
+        <div style={{ marginTop: 'var(--space-sm)' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)', marginBottom: 'var(--space-sm)' }}>
             {agent.provider}
           </p>
 
@@ -59,21 +60,21 @@ export default function AgentCard({ agent }: AgentCardProps) {
           <div
             style={{
               backgroundColor: 'var(--bg-tertiary)',
-              padding: '0.4rem',
-              borderRadius: '4px',
-              marginBottom: '0.5rem',
+              padding: 'var(--space-sm)',
+              borderRadius: 'var(--border-radius)',
+              marginBottom: 'var(--space-sm)',
             }}
           >
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
-              Cash Balance
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)', marginBottom: '2px' }}>
+              Cash
             </p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--success)' }}>
+            <p style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, color: 'var(--semantic-success)', fontFamily: 'var(--font-mono)' }}>
               ₹{agent.cash.toFixed(2)}
             </p>
           </div>
 
           {/* Inventory */}
-          <div style={{ marginBottom: '0.5rem' }}>
+          <div style={{ marginBottom: 'var(--space-sm)' }}>
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -84,38 +85,38 @@ export default function AgentCard({ agent }: AgentCardProps) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 cursor: 'pointer',
-                padding: '0.4rem',
+                padding: 'var(--space-sm)',
                 backgroundColor: 'var(--bg-tertiary)',
-                borderRadius: '4px',
-                marginBottom: inventoryExpanded ? '0.4rem' : '0',
+                borderRadius: 'var(--border-radius)',
+                marginBottom: inventoryExpanded ? 'var(--space-sm)' : '0',
               }}
             >
               <p
                 style={{
                   color: 'var(--text-secondary)',
-                  fontSize: '0.75rem',
-                  fontWeight: 'bold',
+                  fontSize: 'var(--font-size-secondary)',
+                  fontWeight: 600,
                 }}
               >
-                Inventory ({Object.keys(agent.inventory).length} items)
+                Inventory ({Object.keys(agent.inventory).length})
               </p>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+              <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
                 {inventoryExpanded ? '▼' : '▶'}
               </span>
             </div>
             {inventoryExpanded && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-xs)' }}>
                 {Object.entries(agent.inventory).map(([good, quantity]) => (
                   <div
                     key={good}
                     style={{
                       backgroundColor: 'var(--bg-tertiary)',
-                      padding: '0.35rem',
-                      borderRadius: '4px',
+                      padding: 'var(--space-xs)',
+                      borderRadius: 'var(--border-radius)',
                     }}
                   >
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{good}</p>
-                    <p style={{ fontWeight: 'bold' }}>{quantity}</p>
+                    <p style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>{good}</p>
+                    <p style={{ fontWeight: 600, fontSize: 'var(--font-size-secondary)', fontFamily: 'var(--font-mono)' }}>{quantity}</p>
                   </div>
                 ))}
               </div>
@@ -129,37 +130,20 @@ export default function AgentCard({ agent }: AgentCardProps) {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: '0.5rem',
+                marginBottom: 'var(--space-xs)',
               }}
             >
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Trade Progress</p>
+              <p style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>Trades</p>
               <p
                 style={{
-                  fontSize: '0.875rem',
-                  fontWeight: 'bold',
-                  color: metRequirement ? 'var(--success)' : 'var(--warning)',
+                  fontSize: 'var(--font-size-secondary)',
+                  fontWeight: 600,
+                  color: metRequirement ? 'var(--semantic-success)' : 'var(--semantic-error)',
+                  fontFamily: 'var(--font-mono)',
                 }}
               >
                 {agent.tradesCompleted} / {agent.tradesRequired}
               </p>
-            </div>
-            <div
-              style={{
-                width: '100%',
-                height: '8px',
-                backgroundColor: 'var(--bg-tertiary)',
-                borderRadius: '4px',
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                style={{
-                  width: `${Math.min(tradeProgress, 100)}%`,
-                  height: '100%',
-                  backgroundColor: metRequirement ? 'var(--success)' : 'var(--accent-primary)',
-                  transition: 'width 0.5s ease-in-out',
-                }}
-              />
             </div>
           </div>
         </div>

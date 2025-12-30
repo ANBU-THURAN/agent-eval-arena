@@ -102,124 +102,124 @@ export default function ComparisonView() {
 
   return (
     <div>
-      <h2 style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'var(--text-2xl)',
-        fontWeight: 'var(--weight-bold)',
-        marginBottom: 'var(--space-4)',
-        textTransform: 'uppercase',
-        letterSpacing: '0.05em',
-      }}>
+      <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
         Agent Comparison
       </h2>
 
       {/* Agent Selection */}
-      <div style={{ marginBottom: 'var(--space-8)' }}>
-        <h3 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'var(--text-xl)',
-          fontWeight: 'var(--weight-semibold)',
-          marginBottom: 'var(--space-4)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}>
+      <div style={{ marginBottom: 'var(--space-lg)' }}>
+        <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
           Select Agents (2-3)
         </h3>
 
         {/* Selection Counter */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--space-2)',
-          marginBottom: 'var(--space-3)',
-          fontSize: 'var(--text-sm)',
-          color: 'var(--text-secondary)',
-        }}>
-          <span style={{
-            backgroundColor: 'var(--accent-purple)',
-            color: 'var(--bg-primary)',
-            padding: 'var(--space-1) var(--space-2)',
-            borderRadius: 'var(--radius-sm)',
-            fontWeight: 'var(--weight-bold)',
-            fontFamily: 'var(--font-mono)',
-          }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-sm)',
+            marginBottom: 'var(--space-sm)',
+            fontSize: 'var(--font-size-secondary)',
+            color: 'var(--text-secondary)',
+          }}
+        >
+          <span
+            style={{
+              backgroundColor: 'var(--color-primary)',
+              color: 'var(--bg-primary)',
+              padding: 'var(--space-xs) var(--space-sm)',
+              borderRadius: 'var(--border-radius)',
+              fontWeight: 600,
+              fontFamily: 'var(--font-mono)',
+            }}
+          >
             {selectedAgentIds.length} of 3
           </span>
           <span>agents selected</span>
         </div>
 
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 'var(--space-2)',
-          marginBottom: 'var(--space-3)'
-        }}>
-          {agents.map((agent) => (
-            <button
-              key={agent.id}
-              onClick={() => handleAgentToggle(agent.id)}
-              style={{
-                padding: 'var(--space-2) var(--space-3)',
-                backgroundColor: selectedAgentIds.includes(agent.id)
-                  ? 'var(--accent-purple)'
-                  : 'var(--surface-01)',
-                border: selectedAgentIds.includes(agent.id)
-                  ? '1px solid var(--accent-teal)'
-                  : '1px solid var(--border-secondary)',
-                borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer',
-                color: selectedAgentIds.includes(agent.id) ? 'var(--bg-primary)' : 'inherit',
-                fontSize: 'var(--text-sm)',
-                fontFamily: 'var(--font-display)',
-                fontWeight: selectedAgentIds.includes(agent.id) ? 'var(--weight-bold)' : 'var(--weight-normal)',
-                transition: 'var(--transition-base)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--space-2)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              {selectedAgentIds.includes(agent.id) && (
-                <span>✓</span>
-              )}
-              {agent.name} ({agent.provider})
-            </button>
-          ))}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: 'var(--space-xs)',
+            marginBottom: 'var(--space-sm)',
+          }}
+        >
+          {agents.map((agent) => {
+            const isSelected = selectedAgentIds.includes(agent.id);
+
+            return (
+              <button
+                key={agent.id}
+                onClick={() => handleAgentToggle(agent.id)}
+                style={{
+                  padding: 'calc(var(--space-xs) + 2px) calc(var(--space-sm) + 4px)',
+                  minHeight: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+
+                  backgroundColor: isSelected
+                    ? 'var(--color-primary)'
+                    : 'var(--bg-secondary)',
+
+                  border: isSelected
+                    ? '1px solid var(--color-primary-light)'
+                    : '1px solid var(--color-primary)',
+
+                  borderRadius: 'var(--border-radius)',
+                  cursor: 'pointer',
+
+                  color: isSelected
+                    ? 'var(--bg-primary)'
+                    : 'var(--text-primary)',
+
+                  fontSize: 'var(--font-size-primary)',
+                  fontWeight: isSelected ? 600 : 400,
+                  lineHeight: 1.2,
+
+                  transition: 'background-color var(--transition), border-color var(--transition), color var(--transition)',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
+                  }
+                }}
+              >
+                {isSelected && '✓ '}
+                {agent.name} ({agent.provider})
+              </button>
+            );
+          })}
         </div>
+
         <button
           onClick={handleCompare}
           disabled={selectedAgentIds.length < 2 || loading}
           style={{
-            padding: 'var(--space-3) var(--space-4)',
-            backgroundColor: selectedAgentIds.length < 2 || loading
-              ? 'var(--surface-02)'
-              : 'var(--accent-purple)',
+            padding: 'var(--space-sm) var(--space-md)',
+            backgroundColor: selectedAgentIds.length < 2 || loading ? 'var(--bg-tertiary)' : 'var(--color-primary)',
             border: '1px solid var(--border-secondary)',
-            borderRadius: 'var(--radius-sm)',
+            borderRadius: 'var(--border-radius)',
             cursor: selectedAgentIds.length < 2 || loading ? 'not-allowed' : 'pointer',
-            fontSize: 'var(--text-sm)',
-            fontFamily: 'var(--font-display)',
-            fontWeight: 'var(--weight-semibold)',
+            fontSize: 'var(--font-size-secondary)',
+            fontWeight: 600,
             color: selectedAgentIds.length < 2 || loading ? 'var(--text-secondary)' : 'var(--bg-primary)',
-            transition: 'var(--transition-base)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
+            transition: 'all var(--transition)',
           }}
           onMouseEnter={(e) => {
             if (selectedAgentIds.length >= 2 && !loading) {
-              e.currentTarget.style.backgroundColor = 'var(--accent-purple)';
-              e.currentTarget.style.opacity = '0.9';
+              e.currentTarget.style.backgroundColor = 'var(--color-primary-light)';
             }
           }}
           onMouseLeave={(e) => {
             if (selectedAgentIds.length >= 2 && !loading) {
-              e.currentTarget.style.backgroundColor = 'var(--accent-purple)';
-              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
             }
           }}
         >
@@ -230,12 +230,13 @@ export default function ComparisonView() {
       {error && (
         <div
           style={{
-            padding: 'var(--space-3)',
-            backgroundColor: 'var(--surface-02)',
-            border: '1px solid var(--error)',
-            borderRadius: 'var(--radius-md)',
-            marginBottom: 'var(--space-3)',
-            color: 'var(--error)',
+            padding: 'var(--space-sm)',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--semantic-error)',
+            borderRadius: 'var(--border-radius)',
+            marginBottom: 'var(--space-md)',
+            color: 'var(--semantic-error)',
+            fontSize: 'var(--font-size-secondary)',
           }}
         >
           {error}
@@ -245,125 +246,74 @@ export default function ComparisonView() {
       {/* Comparison Results */}
       {comparisonData.length > 0 && (
         <div>
-          <h3 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'var(--text-xl)',
-            fontWeight: 'var(--weight-semibold)',
-            marginBottom: 'var(--space-4)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-          }}>
+          <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
             Comparison Results
           </h3>
 
           {/* Current Session Comparison */}
           {comparisonData[0].currentSession && (
-            <div style={{ marginBottom: 'var(--space-8)' }}>
-              <h3 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'var(--text-xl)',
-                fontWeight: 'var(--weight-semibold)',
-                marginBottom: 'var(--space-4)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}>
+            <div style={{ marginBottom: 'var(--space-lg)' }}>
+              <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
                 Current Session
               </h3>
               <div
                 style={{
                   display: 'grid',
                   gridTemplateColumns: `repeat(${comparisonData.length}, 1fr)`,
-                  gap: 'var(--space-3)',
+                  gap: 'var(--space-sm)',
                 }}
               >
                 {comparisonData.map((data) => (
                   <div
                     key={data.agent.id}
                     style={{
-                      backgroundColor: 'var(--surface-01)',
-                      padding: 'var(--space-3)',
-                      borderRadius: 'var(--radius-lg)',
-                      border: '1px solid var(--border-secondary)',
+                      backgroundColor: 'var(--bg-secondary)',
+                      padding: 'var(--space-sm)',
+                      borderRadius: 'var(--border-radius)',
+                      border: '1px solid var(--border-primary)',
                     }}
                   >
-                    <h4 style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'var(--text-sm)',
-                      marginBottom: 'var(--space-3)',
-                      fontWeight: 'var(--weight-bold)'
-                    }}>
+                    <h4 style={{ fontSize: 'var(--font-size-secondary)', marginBottom: 'var(--space-sm)', fontWeight: 600 }}>
                       {data.agent.name}
                     </h4>
                     {data.currentSession && (
                       <>
-                        <div style={{ marginBottom: 'var(--space-2)' }}>
-                          <span style={{
-                            color: 'var(--text-secondary)',
-                            fontSize: 'var(--text-xs)',
-                            fontFamily: 'var(--font-display)',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.05em',
-                          }}>
+                        <div style={{ marginBottom: 'var(--space-xs)' }}>
+                          <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
                             Wealth:
                           </span>
-                          <div style={{
-                            fontSize: 'var(--text-2xl)',
-                            fontWeight: 'var(--weight-bold)',
-                            fontFamily: 'var(--font-mono)',
-                            color: 'var(--success)'
-                          }}>
+                          <div
+                            style={{
+                              fontSize: 'var(--font-size-primary)',
+                              fontWeight: 600,
+                              fontFamily: 'var(--font-mono)',
+                              color: 'var(--semantic-success)',
+                            }}
+                          >
                             ₹{data.currentSession.wealth.toFixed(2)}
                           </div>
                         </div>
-                        <div style={{ marginBottom: 'var(--space-2)' }}>
-                          <span style={{
-                            color: 'var(--text-secondary)',
-                            fontSize: 'var(--text-xs)',
-                            fontFamily: 'var(--font-display)',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.05em',
-                          }}>
+                        <div style={{ marginBottom: 'var(--space-xs)' }}>
+                          <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
                             Cash:
                           </span>
-                          <div style={{
-                            fontSize: 'var(--text-sm)',
-                            fontFamily: 'var(--font-mono)',
-                          }}>
+                          <div style={{ fontSize: 'var(--font-size-secondary)', fontFamily: 'var(--font-mono)' }}>
                             ₹{data.currentSession.cash.toFixed(2)}
                           </div>
                         </div>
-                        <div style={{ marginBottom: 'var(--space-2)' }}>
-                          <span style={{
-                            color: 'var(--text-secondary)',
-                            fontSize: 'var(--text-xs)',
-                            fontFamily: 'var(--font-display)',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.05em',
-                          }}>
+                        <div style={{ marginBottom: 'var(--space-xs)' }}>
+                          <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
                             Trades:
                           </span>
-                          <div style={{
-                            fontSize: 'var(--text-sm)',
-                            fontFamily: 'var(--font-mono)',
-                          }}>
+                          <div style={{ fontSize: 'var(--font-size-secondary)', fontFamily: 'var(--font-mono)' }}>
                             {data.currentSession.tradesCompleted} / {data.currentSession.tradesRequired}
                           </div>
                         </div>
                         <div>
-                          <span style={{
-                            color: 'var(--text-secondary)',
-                            fontSize: 'var(--text-xs)',
-                            fontFamily: 'var(--font-display)',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.05em',
-                          }}>
+                          <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
                             Inventory:
                           </span>
-                          <div style={{
-                            fontSize: 'var(--text-sm)',
-                            fontFamily: 'var(--font-mono)',
-                            marginTop: 'var(--space-1)'
-                          }}>
+                          <div style={{ fontSize: 'var(--font-size-secondary)', fontFamily: 'var(--font-mono)', marginTop: 'var(--space-xs)' }}>
                             {Object.entries(data.currentSession.inventory).map(([good, qty]) => (
                               <div key={good}>
                                 {good}: {qty}
@@ -380,96 +330,53 @@ export default function ComparisonView() {
           )}
 
           {/* All-Time Stats Comparison */}
-          <div style={{ marginBottom: 'var(--space-8)' }}>
-            <h3 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'var(--text-xl)',
-              fontWeight: 'var(--weight-semibold)',
-              marginBottom: 'var(--space-4)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}>
+          <div style={{ marginBottom: 'var(--space-lg)' }}>
+            <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
               All-Time Statistics
             </h3>
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: `repeat(${comparisonData.length}, 1fr)`,
-                gap: 'var(--space-3)',
+                gap: 'var(--space-sm)',
               }}
             >
               {comparisonData.map((data) => (
                 <div
                   key={data.agent.id}
                   style={{
-                    backgroundColor: 'var(--surface-01)',
-                    padding: 'var(--space-3)',
-                    borderRadius: 'var(--radius-lg)',
-                    border: '1px solid var(--border-secondary)',
+                    backgroundColor: 'var(--bg-secondary)',
+                    padding: 'var(--space-sm)',
+                    borderRadius: 'var(--border-radius)',
+                    border: '1px solid var(--border-primary)',
                   }}
                 >
-                  <h4 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'var(--text-sm)',
-                    marginBottom: 'var(--space-3)',
-                    fontWeight: 'var(--weight-bold)'
-                  }}>
+                  <h4 style={{ fontSize: 'var(--font-size-secondary)', marginBottom: 'var(--space-sm)', fontWeight: 600 }}>
                     {data.agent.name}
                   </h4>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 'var(--space-2)',
-                    fontSize: 'var(--text-sm)'
-                  }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)', fontSize: 'var(--font-size-secondary)' }}>
                     <div>
-                      <span style={{
-                        color: 'var(--text-secondary)',
-                        fontSize: 'var(--text-xs)',
-                        fontFamily: 'var(--font-display)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}>Sessions Played:</span>{' '}
+                      <span style={{ color: 'var(--text-secondary)' }}>Sessions Played:</span>{' '}
                       <strong style={{ fontFamily: 'var(--font-mono)' }}>{data.allTimeStats.sessionsPlayed}</strong>
                     </div>
                     <div>
-                      <span style={{
-                        color: 'var(--text-secondary)',
-                        fontSize: 'var(--text-xs)',
-                        fontFamily: 'var(--font-display)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}>Wins:</span>{' '}
+                      <span style={{ color: 'var(--text-secondary)' }}>Wins:</span>{' '}
                       <strong style={{ fontFamily: 'var(--font-mono)' }}>{data.allTimeStats.wins}</strong>
                     </div>
                     <div>
-                      <span style={{
-                        color: 'var(--text-secondary)',
-                        fontSize: 'var(--text-xs)',
-                        fontFamily: 'var(--font-display)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}>Win Rate:</span>{' '}
-                      <strong style={{ fontFamily: 'var(--font-mono)' }}>{(data.allTimeStats.winRate * 100).toFixed(1)}%</strong>
+                      <span style={{ color: 'var(--text-secondary)' }}>Win Rate:</span>{' '}
+                      <strong style={{ fontFamily: 'var(--font-mono)' }}>
+                        {(data.allTimeStats.winRate * 100).toFixed(1)}%
+                      </strong>
                     </div>
                     <div>
-                      <span style={{
-                        color: 'var(--text-secondary)',
-                        fontSize: 'var(--text-xs)',
-                        fontFamily: 'var(--font-display)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}>Average Wealth:</span>{' '}
-                      <strong style={{ fontFamily: 'var(--font-mono)' }}>₹{data.allTimeStats.averageWealth.toFixed(2)}</strong>
+                      <span style={{ color: 'var(--text-secondary)' }}>Average Wealth:</span>{' '}
+                      <strong style={{ fontFamily: 'var(--font-mono)' }}>
+                        ₹{data.allTimeStats.averageWealth.toFixed(2)}
+                      </strong>
                     </div>
                     <div>
-                      <span style={{
-                        color: 'var(--text-secondary)',
-                        fontSize: 'var(--text-xs)',
-                        fontFamily: 'var(--font-display)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}>Total Trades:</span>{' '}
+                      <span style={{ color: 'var(--text-secondary)' }}>Total Trades:</span>{' '}
                       <strong style={{ fontFamily: 'var(--font-mono)' }}>{data.allTimeStats.totalTrades}</strong>
                     </div>
                   </div>
@@ -477,7 +384,6 @@ export default function ComparisonView() {
               ))}
             </div>
           </div>
-
         </div>
       )}
     </div>

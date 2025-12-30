@@ -77,45 +77,50 @@ export default function ArchiveView() {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Loading archive...</p>
+      <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)', padding: 'var(--space-md)' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>Loading archive...</p>
       </div>
     );
   }
 
   return (
-    <div>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+    <div style={{ width: '100%' }}>
+      <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
         Session Archive
       </h2>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 'var(--space-md)' }}>
         {/* Sessions List */}
         <div>
-          <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>
+          <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
             Past Sessions
           </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-xs)',
+              maxHeight: '600px',
+              overflowY: 'auto',
+            }}
+          >
             {sessions.length === 0 ? (
-              <p style={{ color: 'var(--text-secondary)' }}>No sessions yet</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>No sessions yet</p>
             ) : (
               sessions.map((session) => (
                 <div
                   key={session.id}
                   onClick={() => setSelectedSession(session.id)}
                   style={{
-                    backgroundColor:
-                      selectedSession === session.id
-                        ? 'var(--bg-tertiary)'
-                        : 'var(--bg-secondary)',
+                    backgroundColor: selectedSession === session.id ? 'var(--bg-tertiary)' : 'var(--bg-secondary)',
                     border:
                       selectedSession === session.id
-                        ? '1px solid var(--accent-primary)'
-                        : '1px solid var(--border)',
-                    borderRadius: '6px',
-                    padding: '0.75rem',
+                        ? '1px solid var(--color-primary)'
+                        : '1px solid var(--border-primary)',
+                    borderRadius: 'var(--border-radius)',
+                    padding: 'var(--space-sm)',
                     cursor: 'pointer',
-                    transition: 'all 0.2s',
+                    transition: 'background-color var(--transition)',
                   }}
                   onMouseEnter={(e) => {
                     if (selectedSession !== session.id) {
@@ -128,19 +133,17 @@ export default function ArchiveView() {
                     }
                   }}
                 >
-                  <p style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>
+                  <p style={{ fontWeight: 600, marginBottom: '2px', fontSize: 'var(--font-size-secondary)' }}>
                     {session.startTime.toLocaleDateString()}
                   </p>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                    {session.startTime.toLocaleTimeString()} - {session.endTime.toLocaleTimeString()}
+                  <p style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                    {session.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {session.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                   <p
                     style={{
-                      fontSize: '0.75rem',
-                      marginTop: '0.5rem',
-                      color:
-                        session.status === 'completed' ? 'var(--success)' : 'var(--text-secondary)',
-                      textTransform: 'uppercase',
+                      fontSize: 'var(--font-size-secondary)',
+                      marginTop: 'var(--space-xs)',
+                      color: session.status === 'completed' ? 'var(--semantic-success)' : 'var(--text-secondary)',
                     }}
                   >
                     {session.status}
@@ -155,7 +158,7 @@ export default function ArchiveView() {
         <div>
           {selectedSession ? (
             <>
-              <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
                 Session Trades
               </h3>
 
@@ -163,38 +166,26 @@ export default function ArchiveView() {
               {uniqueAgents.length > 0 && (
                 <div
                   style={{
-                    backgroundColor: 'var(--surface-01)',
-                    border: '1px solid var(--border-secondary)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: 'var(--space-3)',
-                    marginBottom: 'var(--space-3)',
+                    backgroundColor: 'var(--bg-tertiary)',
+                    borderRadius: 'var(--border-radius)',
+                    padding: 'var(--space-sm)',
+                    marginBottom: 'var(--space-sm)',
                     display: 'flex',
-                    gap: 'var(--space-3)',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
+                    flexDirection: 'column',
+                    gap: 'var(--space-sm)',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', flex: '1' }}>
-                    <label
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 'var(--text-sm)',
-                        fontWeight: 'var(--weight-semibold)',
-                        color: 'var(--text-secondary)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      Filter by Agent:
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
+                    <label style={{ fontSize: 'var(--font-size-secondary)', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                      Filter:
                     </label>
                     <select
                       value={selectedAgentFilter || ''}
                       onChange={(e) => setSelectedAgentFilter(e.target.value || null)}
                       style={{
                         flex: '1',
-                        minWidth: '200px',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--text-sm)',
+                        fontSize: 'var(--font-size-secondary)',
+                        padding: 'var(--space-xs)',
                       }}
                     >
                       <option value="">All Agents</option>
@@ -207,38 +198,21 @@ export default function ArchiveView() {
                   </div>
 
                   {selectedAgentFilter && (
-                    <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
-                      <label
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontSize: 'var(--text-xs)',
-                          fontWeight: 'var(--weight-semibold)',
-                          color: 'var(--text-secondary)',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        Mode:
-                      </label>
+                    <div style={{ display: 'flex', gap: 'var(--space-xs)', alignItems: 'center' }}>
                       {(['from', 'to', 'either'] as const).map((mode) => (
                         <button
                           key={mode}
                           onClick={() => setFilterMode(mode)}
                           style={{
-                            padding: 'var(--space-2) var(--space-3)',
-                            fontSize: 'var(--text-xs)',
-                            fontFamily: 'var(--font-mono)',
-                            fontWeight: 'var(--weight-semibold)',
-                            textTransform: 'uppercase',
-                            backgroundColor:
-                              filterMode === mode ? 'var(--accent-purple)' : 'transparent',
+                            padding: 'var(--space-xs) var(--space-sm)',
+                            fontSize: 'var(--font-size-secondary)',
+                            fontWeight: 600,
+                            backgroundColor: filterMode === mode ? 'var(--color-primary)' : 'transparent',
                             color: filterMode === mode ? 'var(--bg-primary)' : 'var(--text-secondary)',
-                            border:
-                              filterMode === mode
-                                ? '1px solid var(--accent-teal)'
-                                : '1px solid var(--border-secondary)',
-                            borderRadius: 'var(--radius-sm)',
+                            border: '1px solid var(--border-secondary)',
+                            borderRadius: 'var(--border-radius)',
                             cursor: 'pointer',
-                            transition: 'all var(--transition-base)',
+                            transition: 'all var(--transition)',
                           }}
                         >
                           {mode}
@@ -247,30 +221,40 @@ export default function ArchiveView() {
                       <button
                         onClick={() => setSelectedAgentFilter(null)}
                         style={{
-                          padding: 'var(--space-2) var(--space-3)',
-                          fontSize: 'var(--text-xs)',
-                          fontFamily: 'var(--font-display)',
-                          fontWeight: 'var(--weight-semibold)',
-                          textTransform: 'uppercase',
+                          padding: 'var(--space-xs) var(--space-sm)',
+                          fontSize: 'var(--font-size-secondary)',
+                          fontWeight: 600,
                           backgroundColor: 'transparent',
-                          color: 'var(--error)',
-                          border: '1px solid var(--error)',
-                          borderRadius: 'var(--radius-sm)',
+                          color: 'var(--semantic-error)',
+                          border: '1px solid var(--semantic-error)',
+                          borderRadius: 'var(--border-radius)',
                           cursor: 'pointer',
-                          transition: 'all var(--transition-base)',
-                          marginLeft: 'var(--space-2)',
+                          transition: 'all var(--transition)',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--error)';
-                          e.currentTarget.style.color = 'var(--bg-primary)';
+                          e.currentTarget.style.backgroundColor = 'var(--semantic-error)';
+                          e.currentTarget.style.color = 'var(--text-primary)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = 'transparent';
-                          e.currentTarget.style.color = 'var(--error)';
+                          e.currentTarget.style.color = 'var(--semantic-error)';
                         }}
                       >
                         Clear
                       </button>
+                    </div>
+                  )}
+
+                  {selectedAgentFilter && (
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>
+                      {(() => {
+                        const filteredCount = trades.filter((trade) => {
+                          if (filterMode === 'from') return trade.fromAgentId === selectedAgentFilter;
+                          if (filterMode === 'to') return trade.toAgentId === selectedAgentFilter;
+                          return trade.fromAgentId === selectedAgentFilter || trade.toAgentId === selectedAgentFilter;
+                        }).length;
+                        return `${filteredCount} of ${trades.length}`;
+                      })()}
                     </div>
                   )}
                 </div>
@@ -279,17 +263,18 @@ export default function ArchiveView() {
               <div
                 style={{
                   backgroundColor: 'var(--bg-secondary)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '8px',
+                  border: '1px solid var(--border-primary)',
+                  borderRadius: 'var(--border-radius)',
                   overflow: 'hidden',
                 }}
               >
                 {trades.length === 0 ? (
                   <p
                     style={{
-                      padding: '2.5rem',
+                      padding: 'var(--space-lg)',
                       textAlign: 'center',
                       color: 'var(--text-secondary)',
+                      fontSize: 'var(--font-size-primary)',
                     }}
                   >
                     No trades in this session
@@ -301,89 +286,63 @@ export default function ArchiveView() {
                       ? trades.filter((trade) => {
                           if (filterMode === 'from') return trade.fromAgentId === selectedAgentFilter;
                           if (filterMode === 'to') return trade.toAgentId === selectedAgentFilter;
-                          return (
-                            trade.fromAgentId === selectedAgentFilter ||
-                            trade.toAgentId === selectedAgentFilter
-                          );
+                          return trade.fromAgentId === selectedAgentFilter || trade.toAgentId === selectedAgentFilter;
                         })
                       : trades;
 
                     return (
-                      <>
-                        {selectedAgentFilter && (
-                          <div
+                      <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                        {filteredTrades.length === 0 ? (
+                          <p
                             style={{
-                              padding: 'var(--space-3) var(--space-4)',
-                              backgroundColor: 'var(--surface-02)',
-                              borderBottom: '1px solid var(--border-primary)',
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: 'var(--text-xs)',
+                              padding: 'var(--space-lg)',
+                              textAlign: 'center',
                               color: 'var(--text-secondary)',
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
+                              fontSize: 'var(--font-size-primary)',
                             }}
                           >
-                            <span>
-                              Showing <span style={{ color: 'var(--accent-orange)', fontWeight: 'var(--weight-bold)' }}>{filteredTrades.length}</span> of <span style={{ color: 'var(--text-primary)' }}>{trades.length}</span> trades
-                            </span>
-                            <span style={{ color: 'var(--text-tertiary)' }}>
-                              Filter: {filterMode.toUpperCase()}
-                            </span>
-                          </div>
-                        )}
-                        <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
-                          {filteredTrades.length === 0 ? (
-                            <p
+                            No trades match the current filter
+                          </p>
+                        ) : (
+                          filteredTrades.map((trade, index) => (
+                            <div
+                              key={trade.id}
                               style={{
-                                padding: '2rem',
-                                textAlign: 'center',
-                                color: 'var(--text-secondary)',
+                                padding: 'var(--space-sm)',
+                                borderBottom: index < filteredTrades.length - 1 ? '1px solid var(--border-primary)' : 'none',
                               }}
                             >
-                              No trades match the current filter
-                            </p>
-                          ) : (
-                            filteredTrades.map((trade, index) => (
-                      <div
-                        key={trade.id}
-                        style={{
-                          padding: '1rem',
-                          borderBottom:
-                            index < trades.length - 1 ? '1px solid var(--border)' : 'none',
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            marginBottom: '0.5rem',
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontWeight: 'bold' }}>{trade.fromAgentName}</span>
-                            <span style={{ color: 'var(--text-secondary)' }}>→</span>
-                            <span style={{ fontWeight: 'bold' }}>{trade.toAgentName}</span>
-                          </div>
-                          <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                            {trade.settledAt.toLocaleTimeString()}
-                          </span>
-                        </div>
-                        <div style={{ fontSize: '0.875rem' }}>
-                          <span style={{ color: 'var(--text-secondary)' }}>Traded: </span>
-                          <span style={{ fontWeight: 'bold' }}>
-                            {trade.quantity} {trade.goodUnit} of {trade.goodName}
-                          </span>
-                          <span style={{ color: 'var(--text-secondary)' }}> for </span>
-                          <span style={{ fontWeight: 'bold', color: 'var(--success)' }}>
-                            ₹{trade.price}
-                          </span>
-                        </div>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  marginBottom: '4px',
+                                  fontSize: 'var(--font-size-secondary)',
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)' }}>
+                                  <span style={{ fontWeight: 600 }}>{trade.fromAgentName}</span>
+                                  <span style={{ color: 'var(--text-secondary)' }}>→</span>
+                                  <span style={{ fontWeight: 600 }}>{trade.toAgentName}</span>
+                                </div>
+                                <span style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                                  {trade.settledAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                              <div style={{ fontSize: 'var(--font-size-secondary)' }}>
+                                <span style={{ color: 'var(--text-secondary)' }}>Traded: </span>
+                                <span style={{ fontWeight: 600 }}>
+                                  {trade.quantity} {trade.goodUnit} of {trade.goodName}
+                                </span>
+                                <span style={{ color: 'var(--text-secondary)' }}> for </span>
+                                <span style={{ fontWeight: 600, color: 'var(--semantic-success)', fontFamily: 'var(--font-mono)' }}>
+                                  ₹{trade.price}
+                                </span>
+                              </div>
+                            </div>
+                          ))
+                        )}
                       </div>
-                            ))
-                          )}
-                        </div>
-                      </>
                     );
                   })()
                 )}
@@ -398,7 +357,9 @@ export default function ArchiveView() {
                 height: '400px',
               }}
             >
-              <p style={{ color: 'var(--text-secondary)' }}>Select a session to view trades</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>
+                Select a session to view trades
+              </p>
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import { db, schema } from '../db/index.js';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
 import { TRADING_CONFIG } from '../config/trading.config.js';
 import { TradingService } from './TradingService.js';
@@ -212,7 +212,10 @@ export class SessionScheduler {
 
       // Calculate goods value
       const inventories = await db.query.inventories.findMany({
-        where: eq(schema.inventories.agentId, agent.id),
+        where: and(
+          eq(schema.inventories.sessionId, sessionId),
+          eq(schema.inventories.agentId, agent.id)
+        ),
       });
 
       let goodsValue = 0;

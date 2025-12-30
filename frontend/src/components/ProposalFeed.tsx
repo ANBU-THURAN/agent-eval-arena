@@ -52,27 +52,22 @@ export default function ProposalFeed({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'accepted':
-        return 'var(--success)';
+        return 'var(--semantic-success)';
       case 'rejected':
-        return 'var(--error)';
       case 'countered':
-        return 'var(--warning)';
+        return 'var(--semantic-error)';
       default:
-        return 'var(--accent-primary)';
+        return 'var(--color-primary)';
     }
-  };
-
-  const getStatusLabel = (status: string) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
   return (
     <div
       style={{
         backgroundColor: 'var(--bg-secondary)',
-        border: '1px solid var(--border)',
-        borderRadius: '8px',
-        padding: showHeader ? '1rem' : '0 1rem 1rem',
+        border: '1px solid var(--border-primary)',
+        borderRadius: 'var(--border-radius)',
+        padding: showHeader ? 'var(--space-md)' : '0 var(--space-md) var(--space-md)',
         height: '400px',
         display: 'flex',
         flexDirection: 'column',
@@ -83,67 +78,59 @@ export default function ProposalFeed({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '0.75rem'
+          marginBottom: 'var(--space-sm)'
         }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-            Proposal Feed
+          <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600 }}>
+            Proposals
           </h3>
           {onClose && (
             <button
               onClick={onClose}
               style={{
-                padding: '0.25rem 0.5rem',
-                fontSize: '1rem',
-                fontWeight: 'bold',
+                padding: 'var(--space-xs) var(--space-sm)',
+                fontSize: 'var(--font-size-primary)',
+                fontWeight: 600,
                 backgroundColor: 'transparent',
                 color: 'var(--text-secondary)',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
+                border: '1px solid var(--border-primary)',
+                borderRadius: 'var(--border-radius)',
                 cursor: 'pointer',
-                transition: 'all 0.2s',
-                lineHeight: '1',
+                transition: 'all var(--transition)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--error)';
-                e.currentTarget.style.color = 'var(--bg-primary)';
-                e.currentTarget.style.borderColor = 'var(--error)';
+                e.currentTarget.style.backgroundColor = 'var(--semantic-error)';
+                e.currentTarget.style.color = 'var(--text-primary)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
                 e.currentTarget.style.color = 'var(--text-secondary)';
-                e.currentTarget.style.borderColor = 'var(--border)';
               }}
             >
-              ✕
+              ×
             </button>
           )}
         </div>
       )}
 
-      {/* Filter UI - only show if filter props provided */}
+      {/* Filter UI */}
       {uniqueAgents.length > 0 && setSelectedAgentFilter && setFilterMode && (
         <div
           style={{
-            backgroundColor: 'var(--surface-01)',
-            borderRadius: 'var(--radius-lg)',
-            padding: 'var(--space-3)',
-            marginBottom: 'var(--space-3)',
+            backgroundColor: 'var(--bg-tertiary)',
+            borderRadius: 'var(--border-radius)',
+            padding: 'var(--space-sm)',
+            marginBottom: 'var(--space-sm)',
             display: 'flex',
             flexDirection: 'column',
-            gap: 'var(--space-3)',
-            marginTop: 'var(--space-2)'
+            gap: 'var(--space-sm)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)'}}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)'}}>
             <label
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'var(--text-xs)',
-                fontWeight: 'var(--weight-semibold)',
+                fontSize: 'var(--font-size-secondary)',
+                fontWeight: 600,
                 color: 'var(--text-secondary)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                whiteSpace: 'nowrap',
               }}
             >
               Filter:
@@ -153,10 +140,8 @@ export default function ProposalFeed({
               onChange={(e) => setSelectedAgentFilter(e.target.value || null)}
               style={{
                 flex: '1',
-                fontSize: 'var(--text-xs)',
-                fontFamily: 'var(--font-body)',
-                padding: 'var(--space-2)',
-                borderRadius: 'var(--radius-sm)',
+                fontSize: 'var(--font-size-secondary)',
+                padding: 'var(--space-xs)',
               }}
             >
               <option value="">All Agents</option>
@@ -169,34 +154,22 @@ export default function ProposalFeed({
           </div>
 
           {selectedAgentFilter && (
-            <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center', flexWrap: 'wrap' }}>
-              <label
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'var(--text-xs)',
-                  fontWeight: 'var(--weight-semibold)',
-                  color: 'var(--text-secondary)',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Mode:
-              </label>
+            <div style={{ display: 'flex', gap: 'var(--space-xs)', alignItems: 'center' }}>
               {(['from', 'to', 'either'] as const).map((mode) => (
                 <button
                   key={mode}
                   onClick={() => setFilterMode(mode)}
                   style={{
-                    padding: 'var(--space-1) var(--space-2)',
-                    fontSize: 'var(--text-xs)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 'var(--weight-semibold)',
-                    textTransform: 'uppercase',
-                    backgroundColor: filterMode === mode ? 'var(--accent-purple)' : 'transparent',
+                    padding: 'var(--space-xs) var(--space-sm)',
+                    fontSize: 'var(--font-size-secondary)',
+                    fontWeight: 600,
+                    backgroundColor:
+                      filterMode === mode ? 'var(--color-primary)' : 'transparent',
                     color: filterMode === mode ? 'var(--bg-primary)' : 'var(--text-secondary)',
-                    border: filterMode === mode ? '1px solid var(--accent-teal)' : '1px solid var(--border-secondary)',
-                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--border-secondary)',
+                    borderRadius: 'var(--border-radius)',
                     cursor: 'pointer',
-                    transition: 'all var(--transition-base)',
+                    transition: 'all var(--transition)',
                   }}
                 >
                   {mode}
@@ -205,25 +178,23 @@ export default function ProposalFeed({
               <button
                 onClick={() => setSelectedAgentFilter(null)}
                 style={{
-                  padding: 'var(--space-1) var(--space-2)',
-                  fontSize: 'var(--text-xs)',
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 'var(--weight-semibold)',
-                  textTransform: 'uppercase',
+                  padding: 'var(--space-xs) var(--space-sm)',
+                  fontSize: 'var(--font-size-secondary)',
+                  fontWeight: 600,
                   backgroundColor: 'transparent',
-                  color: 'var(--error)',
-                  border: '1px solid var(--error)',
-                  borderRadius: 'var(--radius-sm)',
+                  color: 'var(--semantic-error)',
+                  border: '1px solid var(--semantic-error)',
+                  borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  transition: 'all var(--transition-base)',
+                  transition: 'all var(--transition)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--error)';
-                  e.currentTarget.style.color = 'var(--bg-primary)';
+                  e.currentTarget.style.backgroundColor = 'var(--semantic-error)';
+                  e.currentTarget.style.color = 'var(--text-primary)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = 'var(--error)';
+                  e.currentTarget.style.color = 'var(--semantic-error)';
                 }}
               >
                 Clear
@@ -235,11 +206,11 @@ export default function ProposalFeed({
             <div
               style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--text-xs)',
+                fontSize: 'var(--font-size-secondary)',
                 color: 'var(--text-secondary)',
               }}
             >
-              Showing <span style={{ color: 'var(--accent-orange)', fontWeight: 'var(--weight-bold)' }}>{proposals.length}</span> of <span style={{ color: 'var(--text-primary)' }}>{allProposals.length}</span> proposals
+              {proposals.length} of {allProposals.length}
             </div>
           )}
         </div>
@@ -251,12 +222,12 @@ export default function ProposalFeed({
           overflowY: 'scroll',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.5rem',
+          gap: 'var(--space-xs)',
         }}
       >
         {proposals.length === 0 ? (
-          <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: '1rem' }}>
-            No proposals yet
+          <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: 'var(--space-lg)', fontSize: 'var(--font-size-secondary)' }}>
+            No proposals
           </p>
         ) : (
           proposals.map((proposal) => {
@@ -268,24 +239,13 @@ export default function ProposalFeed({
                 style={{
                   backgroundColor: 'var(--bg-tertiary)',
                   border: `1px solid ${getStatusColor(proposal.status)}`,
-                  borderRadius: '6px',
-                  padding: '0.5rem 0.75rem',
-                  transition: 'all 0.2s',
+                  borderRadius: 'var(--border-radius)',
+                  padding: 'var(--space-sm)',
                   cursor: 'pointer',
                 }}
                 onClick={() => toggleProposal(proposal.id)}
-                data-proposal-status={proposal.status}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderLeft = '4px solid var(--accent-orange)';
-                  e.currentTarget.style.paddingLeft = 'calc(0.75rem - 3px)';
-                }}
-                onMouseLeave={(e) => {
-                  const status = e.currentTarget.getAttribute('data-proposal-status') as 'pending' | 'accepted' | 'rejected' | 'countered';
-                  e.currentTarget.style.borderLeft = `1px solid ${getStatusColor(status)}`;
-                  e.currentTarget.style.paddingLeft = '0.75rem';
-                }}
               >
-                {/* Compact Header - Always Visible */}
+                {/* Compact Header */}
                 <div
                   style={{
                     display: 'flex',
@@ -293,51 +253,39 @@ export default function ProposalFeed({
                     alignItems: 'center',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
-                    <span style={{ fontWeight: 'bold' }}>{proposal.fromAgentName}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', fontSize: 'var(--font-size-secondary)' }}>
+                    <span style={{ fontWeight: 600 }}>{proposal.fromAgentName}</span>
                     <span style={{ color: 'var(--text-secondary)' }}>→</span>
-                    <span style={{ fontWeight: 'bold' }}>{proposal.toAgentName}</span>
+                    <span style={{ fontWeight: 600 }}>{proposal.toAgentName}</span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span
-                      style={{
-                        fontSize: '0.625rem',
-                        fontWeight: 'bold',
-                        color: getStatusColor(proposal.status),
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      {getStatusLabel(proposal.status)}
-                    </span>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
-                      {isExpanded ? '▼' : '▶'}
-                    </span>
-                  </div>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
+                    {isExpanded ? '▼' : '▶'}
+                  </span>
                 </div>
 
                 {/* Expandable Details */}
                 {isExpanded && (
-                  <div style={{ marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid var(--border)' }}>
+                  <div style={{ marginTop: 'var(--space-sm)', paddingTop: 'var(--space-sm)', borderTop: '1px solid var(--border-primary)' }}>
                     {/* Proposal Details */}
                     <div
                       style={{
                         display: 'flex',
-                        gap: '1rem',
-                        marginBottom: '0.5rem',
-                        fontSize: '0.875rem',
+                        gap: 'var(--space-sm)',
+                        marginBottom: 'var(--space-sm)',
+                        fontSize: 'var(--font-size-secondary)',
                       }}
                     >
                       <div>
                         <span style={{ color: 'var(--text-secondary)' }}>Good: </span>
-                        <span style={{ fontWeight: 'bold' }}>{proposal.goodName}</span>
+                        <span style={{ fontWeight: 600 }}>{proposal.goodName}</span>
                       </div>
                       <div>
                         <span style={{ color: 'var(--text-secondary)' }}>Qty: </span>
-                        <span style={{ fontWeight: 'bold' }}>{proposal.quantity}</span>
+                        <span style={{ fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{proposal.quantity}</span>
                       </div>
                       <div>
                         <span style={{ color: 'var(--text-secondary)' }}>Price: </span>
-                        <span style={{ fontWeight: 'bold', color: 'var(--success)' }}>
+                        <span style={{ fontWeight: 600, color: 'var(--semantic-success)', fontFamily: 'var(--font-mono)' }}>
                           ₹{proposal.price}
                         </span>
                       </div>
@@ -346,7 +294,7 @@ export default function ProposalFeed({
                     {/* Explanation */}
                     <p
                       style={{
-                        fontSize: '0.875rem',
+                        fontSize: 'var(--font-size-secondary)',
                         color: 'var(--text-secondary)',
                         fontStyle: 'italic',
                       }}

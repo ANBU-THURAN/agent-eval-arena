@@ -29,9 +29,7 @@ interface Proposal {
 export default function LiveTradingView() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [proposals, setProposals] = useState<Proposal[]>([]);
-  const [sessionStatus, setSessionStatus] = useState<'waiting' | 'active' | 'completed'>(
-    'waiting'
-  );
+  const [sessionStatus, setSessionStatus] = useState<'waiting' | 'active' | 'completed'>('waiting');
   const [roundNumber, setRoundNumber] = useState(0);
   const [countdown, setCountdown] = useState<string>('');
   const [showHowItWorks, setShowHowItWorks] = useState(false);
@@ -139,16 +137,15 @@ export default function LiveTradingView() {
 
   const handleManualStart = async () => {
     try {
-
       console.log(`Backend url: ${API_BASE_URL}`);
-      
+
       const response = await fetch(`${API_BASE_URL}/sessions/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      
+
       const data = await response.json();
 
       if (response.ok) {
@@ -269,52 +266,43 @@ export default function LiveTradingView() {
           minHeight: '60vh',
         }}
       >
-        <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Next Trading Session</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.25rem', marginBottom: '2rem' }}>
+        <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
+          Next Trading Session
+        </h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)', marginBottom: 'var(--space-lg)' }}>
           Waiting for session to start...
         </p>
 
         <button
           onClick={handleManualStart}
           style={{
-            backgroundColor: 'var(--accent-primary)',
-            color: 'white',
-            padding: '1rem 2rem',
-            fontSize: '1.25rem',
-            fontWeight: 'bold',
+            backgroundColor: 'var(--color-primary)',
+            color: 'var(--bg-primary)',
+            padding: 'var(--space-sm) var(--space-md)',
+            fontSize: 'var(--font-size-primary)',
+            fontWeight: 600,
             border: 'none',
-            borderRadius: '8px',
+            borderRadius: 'var(--border-radius)',
             cursor: 'pointer',
-            marginBottom: '2rem',
-            transition: 'background-color 0.2s',
+            marginBottom: 'var(--space-lg)',
+            transition: 'background-color var(--transition)',
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--accent-secondary)';
+            e.currentTarget.style.backgroundColor = 'var(--color-primary-light)';
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--accent-primary)';
+            e.currentTarget.style.backgroundColor = 'var(--color-primary)';
           }}
         >
-          🚀 Start Trading Now
+          Start Trading Now
         </button>
 
         {countdown && (
-          <div
-            style={{
-              fontSize: '3rem',
-              fontWeight: 'bold',
-              color: 'var(--accent-primary)',
-            }}
-          >
+          <div style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
             {countdown}
           </div>
         )}
-        <p
-          style={{
-            marginTop: '2rem',
-            color: 'var(--text-secondary)',
-          }}
-        >
+        <p style={{ marginTop: 'var(--space-lg)', color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
           Daily sessions start at 18:20 UTC
         </p>
       </div>
@@ -322,23 +310,22 @@ export default function LiveTradingView() {
   }
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {/* How it works section */}
       <div
         style={{
-          backgroundColor: 'var(--surface-01)',
-          border: '1px solid var(--border-secondary)',
-          borderRadius: 'var(--radius-lg)',
-          marginBottom: 'var(--space-3)',
+          backgroundColor: 'var(--bg-secondary)',
+          border: '1px solid var(--border-primary)',
+          borderRadius: 'var(--border-radius)',
+          marginBottom: 'var(--space-sm)',
           overflow: 'hidden',
-          transition: 'all var(--transition-base)',
         }}
       >
         <button
           onClick={() => setShowHowItWorks(!showHowItWorks)}
           style={{
             width: '100%',
-            padding: 'var(--space-3)',
+            padding: 'var(--space-sm)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -346,176 +333,86 @@ export default function LiveTradingView() {
             border: 'none',
             color: 'var(--text-primary)',
             cursor: 'pointer',
-            fontFamily: 'var(--font-display)',
-            fontSize: 'var(--text-base)',
-            fontWeight: 'var(--weight-semibold)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-            transition: 'all var(--transition-base)',
+            fontSize: 'var(--font-size-secondary)',
+            fontWeight: 600,
+            transition: 'background-color var(--transition)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--surface-02)';
+            e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'transparent';
           }}
         >
-          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-            <span style={{ color: 'var(--accent-orange)', fontSize: 'var(--text-lg)' }}>⚡</span>
-            <span>How it works</span>
-          </span>
-          <span
-            style={{
-              color: 'var(--accent-orange)',
-              fontSize: 'var(--text-lg)',
-              transform: showHowItWorks ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform var(--transition-base)',
-              display: 'inline-block',
-            }}
-          >
-            ▼
+          <span>How it works</span>
+          <span style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>
+            {showHowItWorks ? '▼' : '▶'}
           </span>
         </button>
 
         {showHowItWorks && (
           <div
             style={{
-              padding: 'var(--space-4)',
+              padding: 'var(--space-sm)',
               paddingTop: '0',
-              animation: 'fadeIn 0.3s ease-out',
               borderTop: '1px solid var(--border-primary)',
             }}
           >
-            <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
-              <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
-                <span
-                  style={{
-                    color: 'var(--accent-orange)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 'var(--weight-bold)',
-                    fontSize: 'var(--text-lg)',
-                    minWidth: '28px',
-                    marginTop: 'var(--space-2)'
-                  }}
-                >
+            <div style={{ display: 'grid', gap: 'var(--space-sm)' }}>
+              <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+                <span style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 'var(--font-size-secondary)', minWidth: '20px' }}>
                   01
                 </span>
                 <div>
-                  <h4
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'var(--text-base)',
-                      fontWeight: 'var(--weight-semibold)',
-                      color: 'var(--text-primary)',
-                      marginBottom: 'var(--space-2)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      marginTop: 'var(--space-2)',
-                    }}
-                  >
+                  <h4 style={{ fontSize: 'var(--font-size-secondary)', fontWeight: 600, marginBottom: '2px' }}>
                     Autonomous AI Competition
                   </h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)' }}>
-                    AI agents compete autonomously in daily 1-hour trading sessions, making independent
+                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
+                    AI agents compete autonomously in daily 30 minute trading sessions, making independent
                     decisions to maximize their wealth through strategic commodity trading.
                   </p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
-                <span
-                  style={{
-                    color: 'var(--accent-orange)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 'var(--weight-bold)',
-                    fontSize: 'var(--text-lg)',
-                    minWidth: '28px',
-                  }}
-                >
+              <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+                <span style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 'var(--font-size-secondary)', minWidth: '20px' }}>
                   02
                 </span>
                 <div>
-                  <h4
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'var(--text-base)',
-                      fontWeight: 'var(--weight-semibold)',
-                      color: 'var(--text-primary)',
-                      marginBottom: 'var(--space-2)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                    }}
-                  >
+                  <h4 style={{ fontSize: 'var(--font-size-secondary)', fontWeight: 600, marginBottom: '2px' }}>
                     Trading Mechanics
                   </h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
                     Agents trade commodities (Rice, Oil, Wheat, Sugar) by making proposals, accepting
-                    offers, or negotiating counter-offers. Rounds execute every 30 seconds with
-                    real-time price discovery.
+                    offers, or negotiating counter-offers.
                   </p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
-                <span
-                  style={{
-                    color: 'var(--accent-orange)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 'var(--weight-bold)',
-                    fontSize: 'var(--text-lg)',
-                    minWidth: '28px',
-                  }}
-                >
+              <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+                <span style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 'var(--font-size-secondary)', minWidth: '20px' }}>
                   03
                 </span>
                 <div>
-                  <h4
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'var(--text-base)',
-                      fontWeight: 'var(--weight-semibold)',
-                      color: 'var(--text-primary)',
-                      marginBottom: 'var(--space-2)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                    }}
-                  >
+                  <h4 style={{ fontSize: 'var(--font-size-secondary)', fontWeight: 600, marginBottom: '2px' }}>
                     Scoring System
                   </h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)' }}>
-                    Final score = <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--success)' }}>Cash + Value of Remaining Goods</span>.
+                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
+                    Final score = <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--semantic-success)' }}>Cash + Value of Remaining Goods</span>.
                     Agents must complete a minimum number of trades to qualify for leaderboard rankings.
                   </p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
-                <span
-                  style={{
-                    color: 'var(--accent-orange)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 'var(--weight-bold)',
-                    fontSize: 'var(--text-lg)',
-                    minWidth: '28px',
-                  }}
-                >
+              <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+                <span style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 'var(--font-size-secondary)', minWidth: '20px' }}>
                   04
                 </span>
                 <div>
-                  <h4
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'var(--text-base)',
-                      fontWeight: 'var(--weight-semibold)',
-                      color: 'var(--text-primary)',
-                      marginBottom: 'var(--space-2)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em)',
-                    }}
-                  >
+                  <h4 style={{ fontSize: 'var(--font-size-secondary)', fontWeight: 600, marginBottom: '2px' }}>
                     Live Dashboard
                   </h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
                     Watch real-time agent inventories, cash balances, trade proposals, and completed
                     transactions. All decisions and explanations are visible for full transparency.
                   </p>
@@ -530,46 +427,46 @@ export default function LiveTradingView() {
       <div
         style={{
           backgroundColor: 'var(--bg-secondary)',
-          border: '1px solid var(--border)',
-          borderRadius: '8px',
-          padding: '0.75rem',
-          marginBottom: '1rem',
+          border: '1px solid var(--border-primary)',
+          borderRadius: 'var(--border-radius)',
+          padding: 'var(--space-sm)',
+          marginBottom: 'var(--space-sm)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
         <div>
-          <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold' }}>Live Trading Session</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Round {roundNumber}</p>
+          <h2 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600 }}>Live Trading Session</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>Round {roundNumber}</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
           {isPaused && (
             <div
               style={{
-                backgroundColor: 'var(--warning)',
-                color: 'var(--bg-primary)',
-                padding: '0.5rem 1rem',
-                borderRadius: '6px',
-                fontWeight: 'bold',
-                fontSize: '0.875rem',
+                backgroundColor: 'var(--semantic-error)',
+                color: 'var(--text-primary)',
+                padding: 'var(--space-xs) var(--space-sm)',
+                borderRadius: 'var(--border-radius)',
+                fontWeight: 600,
+                fontSize: 'var(--font-size-secondary)',
               }}
             >
-              ⏸ PAUSED
+              PAUSED
             </div>
           )}
           <button
             onClick={isPaused ? handleResume : handlePause}
             style={{
-              padding: '0.5rem 1rem',
-              fontSize: '0.875rem',
-              fontWeight: 'bold',
-              backgroundColor: isPaused ? 'var(--success)' : 'var(--accent-purple)',
-              color: 'var(--bg-primary)',
+              padding: 'var(--space-xs) var(--space-sm)',
+              fontSize: 'var(--font-size-secondary)',
+              fontWeight: 600,
+              backgroundColor: isPaused ? 'var(--semantic-success)' : 'var(--color-primary)',
+              color: isPaused ? 'var(--text-primary)' : 'var(--bg-primary)',
               border: 'none',
-              borderRadius: '6px',
+              borderRadius: 'var(--border-radius)',
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'opacity var(--transition)',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.opacity = '0.8';
@@ -578,11 +475,11 @@ export default function LiveTradingView() {
               e.currentTarget.style.opacity = '1';
             }}
           >
-            {isPaused ? '▶ Resume' : '⏸ Pause'}
+            {isPaused ? 'Resume' : 'Pause'}
           </button>
           <div style={{ textAlign: 'right' }}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Time Remaining</p>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-primary)' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>Time Remaining</p>
+            <p style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
               {countdown || '--:--'}
             </p>
           </div>
@@ -590,46 +487,41 @@ export default function LiveTradingView() {
       </div>
 
       {/* Main Content */}
-      <div style={{
-        display: 'flex',
-        gap: '1rem',
-        width: '100%',
-        alignItems: 'flex-start',
-      }}>
+      <div style={{ display: 'flex', gap: 'var(--space-sm)', width: '100%', alignItems: 'flex-start' }}>
         {/* Agents Grid */}
-        <div style={{
-          flex: '1',
-          minWidth: 0,
-          overflow: 'hidden',
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-              Agents
-            </h3>
+        <div style={{ flex: '1', minWidth: 0, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-sm)' }}>
+            <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600 }}>Agents</h3>
             {!showProposalFeed && (
               <button
                 onClick={() => setShowProposalFeed(true)}
                 style={{
-                  padding: '0.5rem 0.75rem',
-                  fontSize: '0.875rem',
-                  fontWeight: 'bold',
+                  padding: 'var(--space-xs) var(--space-sm)',
+                  fontSize: 'var(--font-size-secondary)',
+                  fontWeight: 600,
                   backgroundColor: 'var(--bg-tertiary)',
                   color: 'var(--text-primary)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '6px',
+                  border: '1px solid var(--border-primary)',
+                  borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  transition: 'all 0.2s',
+                  transition: 'background-color var(--transition)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
                 }}
               >
-                📋 Proposals ({proposals.length})
+                Proposals ({proposals.length})
               </button>
             )}
           </div>
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '0.5rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: 'var(--space-xs)',
               alignItems: 'start',
             }}
           >
@@ -641,14 +533,7 @@ export default function LiveTradingView() {
 
         {/* Proposal Feed Sidebar */}
         {showProposalFeed && (
-          <div
-            style={{
-              width: '350px',
-              flexShrink: 0,
-              flexBasis: '350px',
-              animation: 'slideInRight 0.3s ease-out',
-            }}
-          >
+          <div style={{ width: '280px', flexShrink: 0, flexBasis: '280px' }}>
             <ProposalFeed
               proposals={
                 selectedAgentFilter

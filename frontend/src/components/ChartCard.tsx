@@ -7,21 +7,17 @@ export default function ChartCard({ title, children }: ChartCardProps) {
   return (
     <div
       style={{
-        backgroundColor: 'var(--surface-01)',
-        border: '1px solid var(--border-secondary)',
-        borderRadius: 'var(--radius-lg)',
-        padding: 'var(--space-4)',
-        minHeight: '270px',
+        backgroundColor: 'var(--bg-secondary)',
+        border: '1px solid var(--border-primary)',
+        borderRadius: 'var(--border-radius)',
+        padding: 'var(--space-md)',
       }}
     >
       <h3
         style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'var(--text-lg)',
-          fontWeight: 'var(--weight-semibold)',
-          marginBottom: 'var(--space-6)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
+          fontSize: 'var(--font-size-primary)',
+          fontWeight: 600,
+          marginBottom: 'var(--space-md)',
           color: 'var(--text-primary)',
         }}
       >

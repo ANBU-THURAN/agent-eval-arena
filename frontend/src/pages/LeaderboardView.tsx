@@ -111,127 +111,70 @@ export default function LeaderboardView() {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Loading leaderboard...</p>
+      <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)', padding: 'var(--space-md)' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>Loading leaderboard...</p>
       </div>
     );
   }
 
   return (
-    <div>
-      <h2
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'var(--text-2xl)',
-          fontWeight: 'var(--weight-bold)',
-          marginBottom: 'var(--space-4)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}
-      >
+    <div style={{ width: '100%' }}>
+      <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
         Leaderboard
       </h2>
 
-      {/* Stats Summary - at the top */}
+      {/* Stats Summary */}
       {leaderboard.length > 0 && (
         <div
           style={{
-            marginBottom: 'var(--space-3)',
+            marginBottom: 'var(--space-md)',
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 'var(--space-2)',
+            gap: 'var(--space-sm)',
           }}
         >
           <div
             style={{
-              backgroundColor: 'var(--surface-01)',
-              border: '1px solid var(--border-secondary)',
-              borderRadius: 'var(--radius-lg)',
-              padding: 'var(--space-2)',
+              backgroundColor: 'var(--bg-secondary)',
+              border: '1px solid var(--border-primary)',
+              borderRadius: 'var(--border-radius)',
+              padding: 'var(--space-sm)',
             }}
           >
-            <p
-              style={{
-                color: 'var(--text-secondary)',
-                fontSize: 'var(--text-xs)',
-                marginBottom: 'var(--space-1)',
-                fontFamily: 'var(--font-display)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)', marginBottom: '2px' }}>
               Total Sessions
             </p>
-            <p
-              style={{
-                fontSize: 'var(--text-2xl)',
-                fontWeight: 'var(--weight-bold)',
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--accent-orange)',
-              }}
-            >
+            <p style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
               {sessions.length}
             </p>
           </div>
           <div
             style={{
-              backgroundColor: 'var(--surface-01)',
-              border: '1px solid var(--border-secondary)',
-              borderRadius: 'var(--radius-lg)',
-              padding: 'var(--space-2)',
+              backgroundColor: 'var(--bg-secondary)',
+              border: '1px solid var(--border-primary)',
+              borderRadius: 'var(--border-radius)',
+              padding: 'var(--space-sm)',
             }}
           >
-            <p
-              style={{
-                color: 'var(--text-secondary)',
-                fontSize: 'var(--text-xs)',
-                marginBottom: 'var(--space-1)',
-                fontFamily: 'var(--font-display)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)', marginBottom: '2px' }}>
               Total Trades
             </p>
-            <p
-              style={{
-                fontSize: 'var(--text-2xl)',
-                fontWeight: 'var(--weight-bold)',
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--accent-orange)',
-              }}
-            >
+            <p style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
               {leaderboard.reduce((sum, e) => sum + e.totalTrades, 0)}
             </p>
           </div>
           <div
             style={{
-              backgroundColor: 'var(--surface-01)',
-              border: '1px solid var(--border-secondary)',
-              borderRadius: 'var(--radius-lg)',
-              padding: 'var(--space-2)',
+              backgroundColor: 'var(--bg-secondary)',
+              border: '1px solid var(--border-primary)',
+              borderRadius: 'var(--border-radius)',
+              padding: 'var(--space-sm)',
             }}
           >
-            <p
-              style={{
-                color: 'var(--text-secondary)',
-                fontSize: 'var(--text-xs)',
-                marginBottom: 'var(--space-1)',
-                fontFamily: 'var(--font-display)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)', marginBottom: '2px' }}>
               Active Agents
             </p>
-            <p
-              style={{
-                fontSize: 'var(--text-2xl)',
-                fontWeight: 'var(--weight-bold)',
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--accent-orange)',
-              }}
-            >
+            <p style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
               {leaderboard.length}
             </p>
           </div>
@@ -239,44 +182,35 @@ export default function LeaderboardView() {
       )}
 
       {/* All-Time Leaderboard */}
-      <h3
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'var(--text-xl)',
-          fontWeight: 'var(--weight-semibold)',
-          marginBottom: 'var(--space-4)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}
-      >
+      <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
         All-Time Rankings
       </h3>
 
       <div
         style={{
-          backgroundColor: 'var(--surface-01)',
-          border: '1px solid var(--border-secondary)',
-          borderRadius: 'var(--radius-lg)',
+          backgroundColor: 'var(--bg-secondary)',
+          border: '1px solid var(--border-primary)',
+          borderRadius: 'var(--border-radius)',
           overflow: 'hidden',
-          marginBottom: 'var(--space-8)',
+          marginBottom: 'var(--space-lg)',
         }}
       >
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: 'var(--surface-02)' }}>
+            <tr style={{ backgroundColor: 'var(--bg-tertiary)' }}>
               <th style={tableHeaderStyle}>Rank</th>
               <th style={{ ...tableHeaderStyle, textAlign: 'left' }}>Agent</th>
               <th style={{ ...tableHeaderStyle, textAlign: 'left' }}>Provider</th>
               <th style={tableHeaderStyle}>Avg Wealth</th>
               <th style={tableHeaderStyle}>Sessions</th>
               <th style={tableHeaderStyle}>Wins</th>
-              <th style={tableHeaderStyle}>Total Trades</th>
+              <th style={tableHeaderStyle}>Trades</th>
             </tr>
           </thead>
           <tbody>
             {leaderboard.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ ...tableCellStyle, textAlign: 'center' }}>
+                <td colSpan={7} style={{ ...tableCellStyle, textAlign: 'center', color: 'var(--text-secondary)' }}>
                   No leaderboard data yet
                 </td>
               </tr>
@@ -285,53 +219,40 @@ export default function LeaderboardView() {
                 <tr
                   key={entry.agentId}
                   style={{
-                    backgroundColor: index % 2 === 0 ? 'var(--surface-01)' : 'var(--surface-02)',
+                    borderBottom: index < leaderboard.length - 1 ? '1px solid var(--border-primary)' : 'none',
                   }}
                 >
-                  <td style={{ ...tableCellStyle, textAlign: 'center', fontWeight: 'bold' }}>
-                    {index === 0 && '🥇'}
-                    {index === 1 && '🥈'}
-                    {index === 2 && '🥉'}
-                    {index > 2 && index + 1}
-                  </td>
-                  <td style={{ ...tableCellStyle, fontWeight: 'bold' }}>{entry.agentName}</td>
-                  <td style={tableCellStyle}>{entry.provider}</td>
                   <td
                     style={{
                       ...tableCellStyle,
                       textAlign: 'center',
-                      color: 'var(--success)',
-                      fontWeight: 'bold',
+                      fontWeight: 600,
+                      color: index < 3 ? 'var(--color-primary)' : 'var(--text-primary)',
+                      fontFamily: 'var(--font-mono)',
+                    }}
+                  >
+                    {index + 1}
+                  </td>
+                  <td style={{ ...tableCellStyle, fontWeight: 600 }}>{entry.agentName}</td>
+                  <td style={{ ...tableCellStyle, color: 'var(--text-secondary)' }}>{entry.provider}</td>
+                  <td
+                    style={{
+                      ...tableCellStyle,
+                      textAlign: 'center',
+                      color: 'var(--semantic-success)',
+                      fontWeight: 600,
                       fontFamily: 'var(--font-mono)',
                     }}
                   >
                     ₹{entry.averageWealth.toFixed(2)}
                   </td>
-                  <td
-                    style={{
-                      ...tableCellStyle,
-                      textAlign: 'center',
-                      fontFamily: 'var(--font-mono)',
-                    }}
-                  >
+                  <td style={{ ...tableCellStyle, textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
                     {entry.sessionsPlayed}
                   </td>
-                  <td
-                    style={{
-                      ...tableCellStyle,
-                      textAlign: 'center',
-                      fontFamily: 'var(--font-mono)',
-                    }}
-                  >
+                  <td style={{ ...tableCellStyle, textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
                     {entry.wins}
                   </td>
-                  <td
-                    style={{
-                      ...tableCellStyle,
-                      textAlign: 'center',
-                      fontFamily: 'var(--font-mono)',
-                    }}
-                  >
+                  <td style={{ ...tableCellStyle, textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
                     {entry.totalTrades}
                   </td>
                 </tr>
@@ -342,40 +263,33 @@ export default function LeaderboardView() {
       </div>
 
       {/* Per-Session Leaderboards */}
-      <h3
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'var(--text-xl)',
-          fontWeight: 'var(--weight-semibold)',
-          marginBottom: 'var(--space-4)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}
-      >
+      <h3 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
         Session History
       </h3>
 
       <div
         style={{
-          backgroundColor: 'var(--surface-01)',
-          border: '1px solid var(--border-secondary)',
-          borderRadius: 'var(--radius-lg)',
+          backgroundColor: 'var(--bg-secondary)',
+          border: '1px solid var(--border-primary)',
+          borderRadius: 'var(--border-radius)',
           overflow: 'hidden',
         }}
       >
         {sessions.length === 0 ? (
-          <div style={{ padding: 'var(--space-8)', textAlign: 'center' }}>
-            <p style={{ color: 'var(--text-secondary)' }}>No completed sessions yet</p>
+          <div style={{ padding: 'var(--space-md)', textAlign: 'center' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>
+              No completed sessions yet
+            </p>
           </div>
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ backgroundColor: 'var(--surface-02)' }}>
-                <th style={{ ...tableHeaderStyle, width: '50px' }}></th>
+              <tr style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+                <th style={{ ...tableHeaderStyle, width: '32px' }}></th>
                 <th style={{ ...tableHeaderStyle, textAlign: 'left' }}>Date</th>
                 <th style={{ ...tableHeaderStyle, textAlign: 'left' }}>Time</th>
                 <th style={{ ...tableHeaderStyle, textAlign: 'left' }}>Winner</th>
-                <th style={tableHeaderStyle}>Winner Wealth</th>
+                <th style={tableHeaderStyle}>Wealth</th>
               </tr>
             </thead>
             <tbody>
@@ -392,39 +306,29 @@ export default function LeaderboardView() {
                     <tr
                       onClick={() => toggleSessionExpand(session.id)}
                       style={{
-                        backgroundColor:
-                          sessionIndex % 2 === 0 ? 'var(--surface-01)' : 'var(--surface-02)',
                         cursor: 'pointer',
-                        transition: 'background-color var(--transition-base)',
+                        borderBottom: '1px solid var(--border-primary)',
+                        transition: 'background-color var(--transition)',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'var(--surface-03)';
+                        e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor =
-                          sessionIndex % 2 === 0 ? 'var(--surface-01)' : 'var(--surface-02)';
+                        e.currentTarget.style.backgroundColor = 'transparent';
                       }}
                     >
-                      <td style={{ ...tableCellStyle, textAlign: 'center' }}>
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            color: 'var(--accent-orange)',
-                            fontSize: 'var(--text-lg)',
-                            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                            transition: 'transform var(--transition-base)',
-                          }}
-                        >
-                          ▼
+                      <td style={{ ...tableCellStyle, textAlign: 'center', padding: 'var(--space-xs)' }}>
+                        <span style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>
+                          {isExpanded ? '▼' : '▶'}
                         </span>
                       </td>
-                      <td style={{ ...tableCellStyle, fontWeight: 'var(--weight-semibold)' }}>
+                      <td style={{ ...tableCellStyle, fontWeight: 500 }}>
                         {startDate.toLocaleDateString()}
                       </td>
-                      <td style={{ ...tableCellStyle, fontFamily: 'var(--font-mono)' }}>
-                        {startDate.toLocaleTimeString()} - {endDate.toLocaleTimeString()}
+                      <td style={{ ...tableCellStyle, fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-secondary)', color: 'var(--text-secondary)' }}>
+                        {startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </td>
-                      <td style={{ ...tableCellStyle, fontWeight: 'var(--weight-bold)' }}>
+                      <td style={{ ...tableCellStyle, fontWeight: 600 }}>
                         {winner ? winner.agentName : 'Loading...'}
                       </td>
                       <td
@@ -432,8 +336,8 @@ export default function LeaderboardView() {
                           ...tableCellStyle,
                           textAlign: 'center',
                           fontFamily: 'var(--font-mono)',
-                          color: 'var(--success)',
-                          fontWeight: 'var(--weight-bold)',
+                          color: 'var(--semantic-success)',
+                          fontWeight: 600,
                         }}
                       >
                         {winner ? `₹${winner.totalWealth.toFixed(2)}` : '---'}
@@ -447,140 +351,79 @@ export default function LeaderboardView() {
                           <div
                             style={{
                               backgroundColor: 'var(--bg-primary)',
-                              padding: 'var(--space-4)',
+                              padding: 'var(--space-md)',
                               borderTop: '1px solid var(--border-primary)',
                               borderBottom: '1px solid var(--border-primary)',
-                              animation: 'fadeIn 0.3s ease-out',
                             }}
                           >
                             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                               <thead>
-                                <tr style={{ backgroundColor: 'var(--surface-02)' }}>
-                                  <th
-                                    style={{
-                                      ...tableHeaderStyle,
-                                      fontSize: 'var(--text-xs)',
-                                      padding: 'var(--space-2) var(--space-3)',
-                                    }}
-                                  >
-                                    Rank
-                                  </th>
-                                  <th
-                                    style={{
-                                      ...tableHeaderStyle,
-                                      textAlign: 'left',
-                                      fontSize: 'var(--text-xs)',
-                                      padding: 'var(--space-2) var(--space-3)',
-                                    }}
-                                  >
-                                    Agent
-                                  </th>
-                                  <th
-                                    style={{
-                                      ...tableHeaderStyle,
-                                      textAlign: 'left',
-                                      fontSize: 'var(--text-xs)',
-                                      padding: 'var(--space-2) var(--space-3)',
-                                    }}
-                                  >
-                                    Provider
-                                  </th>
-                                  <th
-                                    style={{
-                                      ...tableHeaderStyle,
-                                      fontSize: 'var(--text-xs)',
-                                      padding: 'var(--space-2) var(--space-3)',
-                                    }}
-                                  >
-                                    Final Wealth
-                                  </th>
-                                  <th
-                                    style={{
-                                      ...tableHeaderStyle,
-                                      fontSize: 'var(--text-xs)',
-                                      padding: 'var(--space-2) var(--space-3)',
-                                    }}
-                                  >
-                                    Trades
-                                  </th>
+                                <tr style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+                                  <th style={{ ...expandedHeaderStyle }}>Rank</th>
+                                  <th style={{ ...expandedHeaderStyle, textAlign: 'left' }}>Agent</th>
+                                  <th style={{ ...expandedHeaderStyle, textAlign: 'left' }}>Provider</th>
+                                  <th style={{ ...expandedHeaderStyle }}>Wealth</th>
+                                  <th style={{ ...expandedHeaderStyle }}>Trades</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 {sessionLeaderboard.map((entry, rank) => {
                                   const failedRequirement = entry.tradesCompleted < 5;
                                   return (
-                                  <tr
-                                    key={entry.agentId}
-                                    style={{
-                                      backgroundColor:
-                                        rank % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-tertiary)',
-                                      borderLeft: failedRequirement ? '3px solid var(--error)' : 'none',
-                                    }}
-                                  >
-                                    <td
+                                    <tr
+                                      key={entry.agentId}
                                       style={{
-                                        ...tableCellStyle,
-                                        textAlign: 'center',
-                                        fontWeight: 'var(--weight-bold)',
-                                        fontSize: 'var(--text-sm)',
-                                        padding: 'var(--space-2) var(--space-3)',
+                                        borderBottom: rank < sessionLeaderboard.length - 1 ? '1px solid var(--border-primary)' : 'none',
+                                        borderLeft: failedRequirement ? '2px solid var(--semantic-error)' : 'none',
                                       }}
                                     >
-                                      {rank === 0 && '🥇'}
-                                      {rank === 1 && '🥈'}
-                                      {rank === 2 && '🥉'}
-                                      {rank > 2 && rank + 1}
-                                    </td>
-                                    <td
-                                      style={{
-                                        ...tableCellStyle,
-                                        fontWeight: 'var(--weight-semibold)',
-                                        fontSize: 'var(--text-sm)',
-                                        padding: 'var(--space-2) var(--space-3)',
-                                        color: failedRequirement ? 'var(--error)' : 'inherit',
-                                      }}
-                                    >
-                                      {entry.agentName}
-                                      {failedRequirement && ' ⚠️'}
-                                    </td>
-                                    <td
-                                      style={{
-                                        ...tableCellStyle,
-                                        fontSize: 'var(--text-sm)',
-                                        padding: 'var(--space-2) var(--space-3)',
-                                        color: 'var(--text-secondary)',
-                                      }}
-                                    >
-                                      {entry.provider}
-                                    </td>
-                                    <td
-                                      style={{
-                                        ...tableCellStyle,
-                                        textAlign: 'center',
-                                        color: 'var(--success)',
-                                        fontWeight: 'var(--weight-bold)',
-                                        fontFamily: 'var(--font-mono)',
-                                        fontSize: 'var(--text-sm)',
-                                        padding: 'var(--space-2) var(--space-3)',
-                                      }}
-                                    >
-                                      ₹{entry.totalWealth.toFixed(2)}
-                                    </td>
-                                    <td
-                                      style={{
-                                        ...tableCellStyle,
-                                        textAlign: 'center',
-                                        fontFamily: 'var(--font-mono)',
-                                        fontSize: 'var(--text-sm)',
-                                        padding: 'var(--space-2) var(--space-3)',
-                                        color: failedRequirement ? 'var(--error)' : 'inherit',
-                                        fontWeight: failedRequirement ? 'var(--weight-bold)' : 'inherit',
-                                      }}
-                                    >
-                                      {entry.tradesCompleted}
-                                    </td>
-                                  </tr>
-                                );
+                                      <td
+                                        style={{
+                                          ...expandedCellStyle,
+                                          textAlign: 'center',
+                                          fontWeight: 600,
+                                          color: rank < 3 ? 'var(--color-primary)' : 'var(--text-primary)',
+                                          fontFamily: 'var(--font-mono)',
+                                        }}
+                                      >
+                                        {rank + 1}
+                                      </td>
+                                      <td
+                                        style={{
+                                          ...expandedCellStyle,
+                                          fontWeight: 600,
+                                          color: failedRequirement ? 'var(--semantic-error)' : 'var(--text-primary)',
+                                        }}
+                                      >
+                                        {entry.agentName}
+                                      </td>
+                                      <td style={{ ...expandedCellStyle, color: 'var(--text-secondary)' }}>
+                                        {entry.provider}
+                                      </td>
+                                      <td
+                                        style={{
+                                          ...expandedCellStyle,
+                                          textAlign: 'center',
+                                          color: 'var(--semantic-success)',
+                                          fontWeight: 600,
+                                          fontFamily: 'var(--font-mono)',
+                                        }}
+                                      >
+                                        ₹{entry.totalWealth.toFixed(2)}
+                                      </td>
+                                      <td
+                                        style={{
+                                          ...expandedCellStyle,
+                                          textAlign: 'center',
+                                          fontFamily: 'var(--font-mono)',
+                                          color: failedRequirement ? 'var(--semantic-error)' : 'var(--text-primary)',
+                                          fontWeight: failedRequirement ? 600 : 400,
+                                        }}
+                                      >
+                                        {entry.tradesCompleted}
+                                      </td>
+                                    </tr>
+                                  );
                                 })}
                               </tbody>
                             </table>
@@ -600,13 +443,27 @@ export default function LeaderboardView() {
 }
 
 const tableHeaderStyle: React.CSSProperties = {
-  padding: '0.5rem',
+  padding: 'var(--space-xs) var(--space-sm)',
   textAlign: 'center',
-  fontSize: '0.875rem',
-  fontWeight: 'bold',
+  fontSize: 'var(--font-size-secondary)',
+  fontWeight: 600,
   color: 'var(--text-secondary)',
 };
 
 const tableCellStyle: React.CSSProperties = {
-  padding: '0.5rem',
+  padding: 'var(--space-xs) var(--space-sm)',
+  fontSize: 'var(--font-size-secondary)',
+};
+
+const expandedHeaderStyle: React.CSSProperties = {
+  padding: 'var(--space-xs)',
+  textAlign: 'center',
+  fontSize: 'var(--font-size-secondary)',
+  fontWeight: 600,
+  color: 'var(--text-secondary)',
+};
+
+const expandedCellStyle: React.CSSProperties = {
+  padding: 'var(--space-xs)',
+  fontSize: 'var(--font-size-secondary)',
 };

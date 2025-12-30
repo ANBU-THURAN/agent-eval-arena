@@ -15,44 +15,48 @@ export default function Layout({ children }: LayoutProps) {
       <header
         style={{
           backgroundColor: 'var(--bg-secondary)',
-          borderBottom: '1px solid var(--border)',
-          padding: '0.5rem 1rem',
+          borderBottom: '1px solid var(--border-primary)',
+          height: 'var(--header-height)',
         }}
       >
         <div
           style={{
-            maxWidth: '1400px',
-            margin: '0 auto',
+            height: '100%',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            padding: '0 var(--space-md)',
           }}
         >
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+          <h1 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600 }}>
             Agent Evaluation Arena
           </h1>
 
-          <nav style={{ display: 'flex', gap: '1rem' }}>
+          <nav style={{ display: 'flex', gap: 'var(--space-sm)' }}>
             <Link
               to="/"
               style={{
-                color: isActive('/') ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                color: isActive('/') ? 'var(--color-primary)' : 'var(--text-secondary)',
                 textDecoration: 'none',
-                fontWeight: isActive('/') ? 'bold' : 'normal',
-                transition: 'color 0.2s',
+                fontWeight: isActive('/') ? 600 : 400,
+                fontSize: 'var(--font-size-primary)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                transition: 'color var(--transition)',
               }}
             >
-              Home (Live Trading)
+              Live
             </Link>
             <Link
               to="/charts"
               style={{
-                color: isActive('/charts')
-                  ? 'var(--accent-primary)'
-                  : 'var(--text-secondary)',
+                color: isActive('/charts') ? 'var(--color-primary)' : 'var(--text-secondary)',
                 textDecoration: 'none',
-                fontWeight: isActive('/charts') ? 'bold' : 'normal',
-                transition: 'color 0.2s',
+                fontWeight: isActive('/charts') ? 600 : 400,
+                fontSize: 'var(--font-size-primary)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                transition: 'color var(--transition)',
               }}
             >
               Charts
@@ -60,12 +64,13 @@ export default function Layout({ children }: LayoutProps) {
             <Link
               to="/leaderboard"
               style={{
-                color: isActive('/leaderboard')
-                  ? 'var(--accent-primary)'
-                  : 'var(--text-secondary)',
+                color: isActive('/leaderboard') ? 'var(--color-primary)' : 'var(--text-secondary)',
                 textDecoration: 'none',
-                fontWeight: isActive('/leaderboard') ? 'bold' : 'normal',
-                transition: 'color 0.2s',
+                fontWeight: isActive('/leaderboard') ? 600 : 400,
+                fontSize: 'var(--font-size-primary)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                transition: 'color var(--transition)',
               }}
             >
               Leaderboard
@@ -73,50 +78,57 @@ export default function Layout({ children }: LayoutProps) {
             <Link
               to="/archive"
               style={{
-                color: isActive('/archive')
-                  ? 'var(--accent-primary)'
-                  : 'var(--text-secondary)',
+                color: isActive('/archive') ? 'var(--color-primary)' : 'var(--text-secondary)',
                 textDecoration: 'none',
-                fontWeight: isActive('/archive') ? 'bold' : 'normal',
-                transition: 'color 0.2s',
+                fontWeight: isActive('/archive') ? 600 : 400,
+                fontSize: 'var(--font-size-primary)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                transition: 'color var(--transition)',
               }}
             >
-              Past Sessions
+              Archive
             </Link>
             <Link
               to="/comparison"
               style={{
-                color: isActive('/comparison')
-                  ? 'var(--accent-primary)'
-                  : 'var(--text-secondary)',
+                color: isActive('/comparison') ? 'var(--color-primary)' : 'var(--text-secondary)',
                 textDecoration: 'none',
-                fontWeight: isActive('/comparison') ? 'bold' : 'normal',
-                transition: 'color 0.2s',
+                fontWeight: isActive('/comparison') ? 600 : 400,
+                fontSize: 'var(--font-size-primary)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                transition: 'color var(--transition)',
               }}
             >
-              Compare Agents
+              Compare
             </Link>
           </nav>
         </div>
       </header>
 
       {/* Main Content */}
-      <main style={{ flex: 1, padding: '1rem' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>{children}</div>
+      <main style={{ flex: 1, padding: 'var(--space-md)' }}>
+        {children}
       </main>
 
       {/* Footer */}
       <footer
         style={{
           backgroundColor: 'var(--bg-secondary)',
-          borderTop: '1px solid var(--border)',
-          padding: '0.5rem 1rem',
-          textAlign: 'center',
-          color: 'var(--text-secondary)',
-          fontSize: '0.875rem',
+          borderTop: '1px solid var(--border-primary)',
+          height: 'var(--footer-height)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        Agent Evaluation Arena - Autonomous AI Commodities Trading Competition
+        <span style={{
+          color: 'var(--text-tertiary)',
+          fontSize: 'var(--font-size-secondary)',
+        }}>
+          Agent Evaluation Arena
+        </span>
       </footer>
     </div>
   );

@@ -68,10 +68,11 @@ interface Good {
   referencePrice: number;
 }
 
+// Olive green color palette for charts
 const COLORS = [
-  '#00d4ff', '#ff006e', '#8338ec', '#ffbe0b',
-  '#06ffa5', '#ff5400', '#fb5607', '#3a86ff',
-  '#06d6a0', '#c77dff'
+  '#5a6b4a', '#759952ff', 'rgba(115, 193, 52, 1)', 'rgba(115, 245, 10, 1)',
+  'rgba(198, 245, 10, 1)', 'rgba(153, 180, 46, 1)', 'rgba(106, 118, 58, 1)', 'rgba(59, 62, 46, 1)',
+  'rgba(10, 245, 151, 1)', 'rgba(49, 181, 129, 1)'
 ];
 
 export default function ChartsView() {
@@ -82,7 +83,6 @@ export default function ChartsView() {
   const [loading, setLoading] = useState(true);
   const [agentNames, setAgentNames] = useState<string[]>([]);
   const [totalSessions, setTotalSessions] = useState(0);
-  const [totalTrades, setTotalTrades] = useState(0);
   const [showAgents, setShowAgents] = useState(false);
 
   useEffect(() => {
@@ -105,8 +105,6 @@ export default function ChartsView() {
       const agents = await agentsResponse.json();
       const allAgentNames = agents.map((agent: any) => agent.name);
       setAgentNames(allAgentNames);
-      console.log('🔍 All agent names set:', allAgentNames);
-      console.log('🔍 Agent names count:', allAgentNames.length);
 
       // Fetch all-time leaderboard for win distribution
       const leaderboardResponse = await fetch(`${API_BASE_URL}/leaderboard/alltime`);
@@ -152,13 +150,14 @@ export default function ChartsView() {
         }
 
         setAgentPerformance(performanceData);
-        console.log('🔍 Performance data:', performanceData);
-        console.log('🔍 First dataPoint keys:', Object.keys(performanceData[0] || {}));
 
-        // Trade volume by good (using most recent session)
-        const latestSession = completedSessions[completedSessions.length - 1];
-        const tradesResponse = await fetch(`${API_BASE_URL}/trades/${latestSession.id}`);
-        const trades: Trade[] = await tradesResponse.json();
+        // Trade volume by good (aggregate across ALL sessions)
+        const allTrades: Trade[] = [];
+        for (const session of completedSessions) {
+          const tradesResponse = await fetch(`${API_BASE_URL}/trades/${session.id}`);
+          const sessionTrades: Trade[] = await tradesResponse.json();
+          allTrades.push(...sessionTrades);
+        }
 
         // Fetch all goods to ensure we show all goods even if not traded
         const goodsResponse = await fetch(`${API_BASE_URL}/goods`);
@@ -170,8 +169,8 @@ export default function ChartsView() {
           volumeMap.set(good.name, 0);
         });
 
-        // Count trades for each good
-        trades.forEach((trade) => {
+        // Count trades for each good across all sessions
+        allTrades.forEach((trade) => {
           const count = volumeMap.get(trade.goodName) || 0;
           volumeMap.set(trade.goodName, count + 1);
         });
@@ -182,11 +181,15 @@ export default function ChartsView() {
         }));
         setTradeVolumes(volumes);
 
-        // Trading activity timeline (trades over time during session)
+        // Trading activity timeline (trades over time for latest session only)
+        const latestSession = completedSessions[completedSessions.length - 1];
+        const latestTradesResponse = await fetch(`${API_BASE_URL}/trades/${latestSession.id}`);
+        const latestTrades: Trade[] = await latestTradesResponse.json();
+
         const tradesByHour = new Map<string, number>();
         const sessionStart = new Date(latestSession.startTime);
 
-        trades.forEach((trade) => {
+        latestTrades.forEach((trade) => {
           const tradeTime = new Date(trade.settledAt);
           const minutesFromStart = Math.floor(
             (tradeTime.getTime() - sessionStart.getTime()) / (1000 * 60)
@@ -205,7 +208,6 @@ export default function ChartsView() {
           .sort((a, b) => parseInt(a.time) - parseInt(b.time));
 
         setTradingActivity(activityData);
-        setTotalTrades(trades.length);
       }
 
       setLoading(false);
@@ -217,26 +219,19 @@ export default function ChartsView() {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Loading analytics...</p>
+      <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)', padding: 'var(--space-md)' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>Loading analytics...</p>
       </div>
     );
   }
 
   if (totalSessions === 0) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-        <h2
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'var(--text-3xl)',
-            fontWeight: 'var(--weight-bold)',
-            marginBottom: 'var(--space-4)',
-          }}
-        >
+      <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)', padding: 'var(--space-md)' }}>
+        <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
           Performance Analytics
         </h2>
-        <p style={{ color: 'var(--text-secondary)' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>
           No completed sessions yet. Charts will appear once sessions are completed.
         </p>
       </div>
@@ -244,155 +239,87 @@ export default function ChartsView() {
   }
 
   return (
-    <div>
-      <h2
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'var(--text-2xl)',
-          fontWeight: 'var(--weight-bold)',
-          marginBottom: 'var(--space-4)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}
-      >
+    <div style={{ width: '100%' }}>
+      <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
         Performance Analytics
       </h2>
 
-      {/* Stats Summary Cards */}
-      <div
-        style={{
-          marginBottom: 'var(--space-4)',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 'var(--space-3)',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: 'var(--surface-01)',
-            border: '1px solid var(--border-secondary)',
-            borderRadius: 'var(--radius-lg)',
-            padding: 'var(--space-3)',
-          }}
-        >
-          <p
-            style={{
-              color: 'var(--text-secondary)',
-              fontSize: 'var(--text-xs)',
-              marginBottom: 'var(--space-2)',
-              fontFamily: 'var(--font-display)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}
-          >
-            Total Sessions
-          </p>
-          <p
-            style={{
-              fontSize: 'var(--text-2xl)',
-              fontWeight: 'var(--weight-bold)',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--accent-orange)',
-            }}
-          >
-            {totalSessions}
-          </p>
-        </div>
-        <div
-          style={{
-            backgroundColor: 'var(--surface-01)',
-            border: '1px solid var(--border-secondary)',
-            borderRadius: 'var(--radius-lg)',
-            padding: 'var(--space-3)',
-          }}
-        >
-          <p
-            style={{
-              color: 'var(--text-secondary)',
-              fontSize: 'var(--text-xs)',
-              marginBottom: 'var(--space-2)',
-              fontFamily: 'var(--font-display)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}
-          >
-            Latest Session Trades
-          </p>
-          <p
-            style={{
-              fontSize: 'var(--text-2xl)',
-              fontWeight: 'var(--weight-bold)',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--accent-orange)',
-            }}
-          >
-            {totalTrades}
-          </p>
-        </div>
-        <div
-          style={{
-            backgroundColor: 'var(--surface-01)',
-            border: '1px solid var(--border-secondary)',
-            borderRadius: 'var(--radius-lg)',
-            padding: 'var(--space-3)',
-          }}
-        >
-          <p
-            style={{
-              color: 'var(--text-secondary)',
-              fontSize: 'var(--text-xs)',
-              marginBottom: 'var(--space-2)',
-              fontFamily: 'var(--font-display)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}
-          >
-            Active Agents
-          </p>
-          <p
-            style={{
-              fontSize: 'var(--text-2xl)',
-              fontWeight: 'var(--weight-bold)',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--accent-orange)',
-            }}
-          >
-            {agentNames.length}
-          </p>
-        </div>
-      </div>
-
-      {/* Charts Grid */}
+      {/* Charts Grid - Fixed 2 columns */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
-          gap: 'var(--space-4)',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: 'var(--space-md)',
         }}
       >
         {/* Agent Performance Over Time */}
         {agentPerformance.length > 0 && (
           <ChartCard title="Agent Performance Trends">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={agentPerformance}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-secondary)" />
-                <XAxis dataKey="sessionDate" stroke="var(--text-secondary)" />
-                <YAxis stroke="var(--text-secondary)" />
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={agentPerformance} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+                <CartesianGrid strokeDasharray="0" stroke="var(--border-primary)" />
+                <XAxis
+                  dataKey="sessionDate"
+                  stroke="var(--text-secondary)"
+                  style={{ fontSize: '12px', fontFamily: 'var(--font-primary)' }}
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis
+                  stroke="var(--text-secondary)"
+                  style={{ fontSize: '12px', fontFamily: 'var(--font-primary)' }}
+                  tick={{ fontSize: 12 }}
+                />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'var(--surface-02)',
-                    border: '1px solid var(--border-primary)',
-                    borderRadius: 'var(--radius-md)',
+                  shared
+                  isAnimationActive={false}
+                  content={({ active, payload, label, coordinate }) => {
+                    if (!active || !payload || !coordinate) return null;
+
+                    return (
+                      <div
+                        style={{
+                          position: 'fixed',
+                          top: coordinate.y + 12,
+                          left: coordinate.x + 12,
+                          backgroundColor: 'var(--bg-tertiary)',
+                          border: '1px solid var(--border-primary)',
+                          borderRadius: 'var(--border-radius)',
+                          padding: '8px',
+                          fontSize: '12px',
+                          color: 'var(--text-primary)',
+                          zIndex: 9999,
+                          pointerEvents: 'none',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+                        }}
+                      >
+                        <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                          {label}
+                        </div>
+                        {payload
+                          .filter(p => p.value != null)
+                          .map(p => (
+                            <div key={p.name} style={{ color: p.stroke }}>
+                              {p.name}: {p.value}
+                            </div>
+                          ))}
+                      </div>
+                    );
                   }}
                 />
+
+
+
+
                 {agentNames.map((agent, index) => (
                   <Line
                     key={agent}
                     type="monotone"
                     dataKey={agent}
                     stroke={COLORS[index % COLORS.length]}
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
+                    strokeWidth={1.5}
+                    dot={{ r: 3, strokeWidth: 0 }}
+                    activeDot={{ r: 6 }}
+                    connectNulls
                   />
                 ))}
               </LineChart>
@@ -401,11 +328,11 @@ export default function ChartsView() {
             {/* Custom Agents Legend - Collapsible */}
             <div
               style={{
-                marginTop: 'var(--space-3)',
-                padding: 'var(--space-3)',
-                backgroundColor: 'var(--surface-01)',
-                border: '1px solid var(--border-secondary)',
-                borderRadius: 'var(--radius-md)',
+                marginTop: 'var(--space-sm)',
+                padding: 'var(--space-sm)',
+                backgroundColor: 'var(--bg-tertiary)',
+                border: '1px solid var(--border-primary)',
+                borderRadius: 'var(--border-radius)',
               }}
             >
               <button
@@ -419,68 +346,41 @@ export default function ChartsView() {
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,
-                  marginBottom: showAgents ? 'var(--space-2)' : 0,
+                  marginBottom: showAgents ? 'var(--space-sm)' : 0,
+                  color: 'var(--text-secondary)',
                 }}
               >
-                <p
-                  style={{
-                    fontSize: 'var(--text-xs)',
-                    fontFamily: 'var(--font-display)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    color: 'var(--text-secondary)',
-                    fontWeight: 'var(--weight-bold)',
-                    margin: 0,
-                  }}
-                >
+                <p style={{ fontSize: 'var(--font-size-secondary)', fontWeight: 600, margin: 0 }}>
                   Agents
                 </p>
-                <span
-                  style={{
-                    fontSize: 'var(--text-sm)',
-                    color: 'var(--text-secondary)',
-                    transform: showAgents ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.2s ease',
-                  }}
-                >
-                  ▼
+                <span style={{ fontSize: 'var(--font-size-secondary)' }}>
+                  {showAgents ? '▼' : '▶'}
                 </span>
               </button>
 
               {showAgents && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 'var(--space-2)',
-                  }}
-                >
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-xs)' }}>
                   {agentNames.map((agent, index) => (
                     <div
                       key={agent}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 'var(--space-2)',
-                        padding: 'var(--space-2)',
-                        backgroundColor: 'var(--surface-02)',
-                        borderRadius: 'var(--radius-sm)',
+                        gap: 'var(--space-xs)',
+                        padding: 'var(--space-xs)',
+                        backgroundColor: 'var(--bg-secondary)',
+                        borderRadius: 'var(--border-radius)',
                       }}
                     >
                       <div
                         style={{
-                          width: '12px',
-                          height: '12px',
+                          width: '8px',
+                          height: '8px',
                           borderRadius: '2px',
                           backgroundColor: COLORS[index % COLORS.length],
                         }}
                       />
-                      <span
-                        style={{
-                          fontSize: 'var(--text-sm)',
-                          color: 'var(--text-primary)',
-                        }}
-                      >
+                      <span style={{ fontSize: 'var(--font-size-secondary)', color: 'var(--text-primary)' }}>
                         {agent}
                       </span>
                     </div>
@@ -494,27 +394,32 @@ export default function ChartsView() {
         {/* Trade Volume by Good */}
         {tradeVolumes.length > 0 && (
           <ChartCard title="Trade Volume by Good">
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={tradeVolumes} margin={{ bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-secondary)" />
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={tradeVolumes} margin={{ top: 8, right: 8, bottom: 40, left: 8 }}>
+                <CartesianGrid strokeDasharray="0" stroke="var(--border-primary)" />
                 <XAxis
                   dataKey="good"
                   stroke="var(--text-secondary)"
-                  angle={-90}
+                  angle={-45}
                   textAnchor="end"
-                  height={100}
+                  height={60}
                   interval={0}
-                  tick={{ fontSize: 11 }}
+                  tick={{ fontSize: 10, fontFamily: 'var(--font-primary)' }}
                 />
-                <YAxis stroke="var(--text-secondary)" />
+                <YAxis
+                  stroke="var(--text-secondary)"
+                  tick={{ fontSize: 12, fontFamily: 'var(--font-primary)' }}
+                />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'var(--surface-02)',
+                    backgroundColor: 'var(--bg-tertiary)',
                     border: '1px solid var(--border-primary)',
-                    borderRadius: 'var(--radius-md)',
+                    borderRadius: 'var(--border-radius)',
+                    fontSize: '12px',
+                    fontFamily: 'var(--font-primary)',
                   }}
                 />
-                <Bar dataKey="count" fill="var(--accent-purple)" />
+                <Bar dataKey="count" fill="var(--color-primary)" />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -523,7 +428,7 @@ export default function ChartsView() {
         {/* Win Distribution */}
         {winDistribution.length > 0 && (
           <ChartCard title="Agent Win Distribution">
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie
                   data={winDistribution}
@@ -531,18 +436,26 @@ export default function ChartsView() {
                   nameKey="agentName"
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
+                  outerRadius={70}
+                  label={({ agentName, percent }: any) =>
+                    `${agentName} ${(percent * 100).toFixed(0)}%`
+                  }
+                  labelLine={{ stroke: 'var(--text-secondary)', strokeWidth: 0.5 }}
                 >
                   {winDistribution.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                      stroke={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'white',
                     border: '1px solid var(--border-primary)',
-                    borderRadius: 'var(--radius-md)',
-                    color: 'white',
+                    borderRadius: 'var(--border-radius)',
+                    fontSize: '12px',
+                    fontFamily: 'var(--font-primary)',
                   }}
                 />
               </PieChart>
@@ -551,31 +464,52 @@ export default function ChartsView() {
         )}
 
         {/* Trading Activity Timeline */}
-        {tradingActivity.length > 0 && (
-          <ChartCard title="Trading Activity Timeline">
-            <ResponsiveContainer width="100%" height={250}>
-              <AreaChart data={tradingActivity}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-secondary)" />
-                <XAxis dataKey="time" stroke="var(--text-secondary)" />
-                <YAxis stroke="var(--text-secondary)" />
+        <ChartCard title="Trading Activity Timeline">
+          {tradingActivity.length > 0 ? (
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={tradingActivity} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+                <CartesianGrid strokeDasharray="0" stroke="var(--border-primary)" />
+                <XAxis
+                  dataKey="time"
+                  stroke="var(--text-secondary)"
+                  tick={{ fontSize: 12, fontFamily: 'var(--font-primary)' }}
+                />
+                <YAxis
+                  stroke="var(--text-secondary)"
+                  tick={{ fontSize: 12, fontFamily: 'var(--font-primary)' }}
+                />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'var(--surface-02)',
+                    backgroundColor: 'var(--bg-tertiary)',
                     border: '1px solid var(--border-primary)',
-                    borderRadius: 'var(--radius-md)',
+                    borderRadius: 'var(--border-radius)',
+                    fontSize: '12px',
+                    fontFamily: 'var(--font-primary)',
                   }}
                 />
                 <Area
                   type="monotone"
                   dataKey="trades"
-                  stroke="var(--accent-purple)"
-                  fill="var(--accent-purple)"
-                  fillOpacity={0.3}
+                  stroke="var(--color-primary)"
+                  fill="var(--color-primary)"
+                  fillOpacity={0.2}
+                  strokeWidth={1.5}
                 />
               </AreaChart>
             </ResponsiveContainer>
-          </ChartCard>
-        )}
+          ) : (
+            <div style={{
+              height: '200px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--text-secondary)',
+              fontSize: 'var(--font-size-primary)'
+            }}>
+              No trading activity in latest session
+            </div>
+          )}
+        </ChartCard>
       </div>
     </div>
   );
