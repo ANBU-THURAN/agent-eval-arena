@@ -32,7 +32,8 @@ export default function LiveTradingView() {
   const [sessionStatus, setSessionStatus] = useState<'waiting' | 'active' | 'completed'>('waiting');
   const [roundNumber, setRoundNumber] = useState(0);
   const [countdown, setCountdown] = useState<string>('');
-  const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [nextSessionCountdown, setNextSessionCountdown] = useState<string>('');
+  const [showHowItWorks, setShowHowItWorks] = useState(true);
   const [showProposalFeed, setShowProposalFeed] = useState(false);
   const [selectedAgentFilter, setSelectedAgentFilter] = useState<string | null>(null);
   const [filterMode, setFilterMode] = useState<'from' | 'to' | 'either'>('either');
@@ -128,6 +129,11 @@ export default function LiveTradingView() {
         fetchAgents(data.session.id);
       } else {
         setSessionStatus('waiting');
+
+        // Start countdown to next session if provided
+        if (data.nextSessionTime) {
+          startNextSessionCountdown(new Date(data.nextSessionTime));
+        }
       }
     } catch (error) {
       console.error('Error fetching session status:', error);
@@ -147,6 +153,35 @@ export default function LiveTradingView() {
     } catch (error) {
       console.error('Error fetching proposals:', error);
     }
+  };
+
+  const startNextSessionCountdown = (nextSessionTime: Date) => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const diff = nextSessionTime.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        setNextSessionCountdown('Starting soon...');
+        fetchSessionStatus();
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      if (hours > 0) {
+        setNextSessionCountdown(`${hours}h ${minutes}m ${seconds}s`);
+      } else {
+        setNextSessionCountdown(`${minutes}m ${seconds}s`);
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+
+    // Cleanup function
+    return () => clearInterval(interval);
   };
 
   const handleWebSocketMessage = (message: any) => {
@@ -194,46 +229,17 @@ export default function LiveTradingView() {
     }
   };
 
-  if (sessionStatus === 'waiting') {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '60vh',
-        }}
-      >
-        <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
-          Next Trading Session
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)', marginBottom: 'var(--space-lg)' }}>
-          Waiting for session to start...
-        </p>
-
-        {countdown && (
-          <div style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
-            {countdown}
-          </div>
-        )}
-        <p style={{ marginTop: 'var(--space-lg)', color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>
-          Daily sessions start at 18:20 UTC
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div style={{ width: '100%' }}>
-      {/* How it works section */}
+      {/* How it works section - shown in all states */}
       <div
         style={{
           backgroundColor: 'var(--bg-secondary)',
           border: '1px solid var(--border-primary)',
           borderRadius: 'var(--border-radius)',
           marginBottom: 'var(--space-sm)',
-          overflow: 'hidden',
+          overflow: 'visible',
+          position: 'relative',
         }}
       >
         <button
@@ -268,9 +274,18 @@ export default function LiveTradingView() {
         {showHowItWorks && (
           <div
             style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
               padding: 'var(--space-sm)',
-              paddingTop: '0',
-              borderTop: '1px solid var(--border-primary)',
+              backgroundColor: 'var(--bg-secondary)',
+              border: '1px solid var(--border-primary)',
+              borderTop: 'none',
+              borderRadius: '0 0 var(--border-radius) var(--border-radius)',
+              maxHeight: '300px',
+              overflowY: 'auto',
+              zIndex: 10,
             }}
           >
             <div style={{ display: 'grid', gap: 'var(--space-sm)' }}>
@@ -338,8 +353,45 @@ export default function LiveTradingView() {
         )}
       </div>
 
-      {/* Session Info */}
-      <div
+      {/* Conditional content based on session status */}
+      {sessionStatus === 'waiting' ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '60vh',
+            marginTop: 'var(--space-lg)',
+          }}
+        >
+          <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
+            Previous sessions and trades can be seen in Archive
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)', marginBottom: 'var(--space-md)' }}>
+            Waiting for next session to start...
+          </p>
+
+          {nextSessionCountdown && (
+            <div style={{
+              fontSize: 'var(--font-size-header)',
+              fontWeight: 600,
+              color: 'var(--color-primary)',
+              fontFamily: 'var(--font-mono)',
+              marginBottom: 'var(--space-md)'
+            }}>
+              {nextSessionCountdown}
+            </div>
+          )}
+
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)' }}>
+            Daily sessions start at 18:20 UTC
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Session Info */}
+          <div
         style={{
           backgroundColor: 'var(--bg-secondary)',
           border: '1px solid var(--border-primary)',
@@ -433,6 +485,8 @@ export default function LiveTradingView() {
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }

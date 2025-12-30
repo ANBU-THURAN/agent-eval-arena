@@ -22,6 +22,20 @@ apiRouter.get('/sessions', asyncHandler(async (req, res) => {
 // Get current/next session - MUST come BEFORE :id route
 apiRouter.get('/sessions/current', asyncHandler(async (req, res) => {
   const currentSession = await sessionService.getCurrentSession();
+
+  // If no active session, calculate next session time
+  if (currentSession.type === 'none' || currentSession.type === 'scheduled') {
+    const sessionScheduler = req.app.get('sessionScheduler');
+    if (sessionScheduler) {
+      const nextSessionTime = await sessionScheduler.getNextSessionTime();
+      res.json({
+        ...currentSession,
+        nextSessionTime: nextSessionTime.toISOString()
+      });
+      return;
+    }
+  }
+
   res.json(currentSession);
 }));
 

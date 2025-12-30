@@ -266,11 +266,11 @@ export class SessionScheduler {
     const [hour, minute] = TRADING_CONFIG.sessionStartTime.split(':').map(Number);
 
     const nextSession = new Date(now);
-    nextSession.setHours(hour, minute, 0, 0);
+    nextSession.setUTCHours(hour, minute, 0, 0);
 
     // If the time has passed today, schedule for tomorrow
     if (nextSession <= now) {
-      nextSession.setDate(nextSession.getDate() + 1);
+      nextSession.setUTCDate(nextSession.getUTCDate() + 1);
     }
 
     return nextSession;
