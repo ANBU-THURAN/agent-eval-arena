@@ -293,7 +293,7 @@ export default function LeaderboardView() {
               </tr>
             </thead>
             <tbody>
-              {sessions.map((session, sessionIndex) => {
+              {sessions.map((session) => {
                 const isExpanded = expandedSessions.has(session.id);
                 const sessionLeaderboard = sessionLeaderboards.get(session.id);
                 const winner = sessionLeaderboard?.[0];
