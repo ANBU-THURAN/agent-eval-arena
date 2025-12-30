@@ -365,7 +365,7 @@ export default function LiveTradingView() {
             marginTop: 'var(--space-lg)',
           }}
         >
-          <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
+          <h2 style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, marginBottom: 'var(--space-md)', marginTop: '100px' }}>
             Previous sessions and trades can be seen in Archive
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)', marginBottom: 'var(--space-md)' }}>
