@@ -215,13 +215,17 @@ export class AgentExecutionEngine {
         try {
             switch (functionName) {
                 case 'makeProposal':
-                    return await tools.makeProposal(args.toAgentId, args.goodName, args.quantity, args.price, args.explanation);
+                    const makeArgs = args;
+                    return await tools.makeProposal(makeArgs.toAgentId, makeArgs.goodName, makeArgs.quantity, makeArgs.price, makeArgs.explanation);
                 case 'acceptProposal':
-                    return await tools.acceptProposal(args.proposalId, args.explanation);
+                    const acceptArgs = args;
+                    return await tools.acceptProposal(acceptArgs.proposalId, acceptArgs.explanation);
                 case 'rejectProposal':
-                    return await tools.rejectProposal(args.proposalId, args.explanation);
+                    const rejectArgs = args;
+                    return await tools.rejectProposal(rejectArgs.proposalId, rejectArgs.explanation);
                 case 'counterProposal':
-                    return await tools.counterProposal(args.proposalId, args.quantity, args.price, args.explanation);
+                    const counterArgs = args;
+                    return await tools.counterProposal(counterArgs.proposalId, counterArgs.quantity, counterArgs.price, counterArgs.explanation);
                 case 'getAgentStates':
                     return await tools.getAgentStates();
                 default:

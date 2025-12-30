@@ -4,6 +4,7 @@ import { eq, desc } from 'drizzle-orm';
 import { SessionService } from '../services/SessionService.js';
 import { LeaderboardService } from '../services/LeaderboardService.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
+import { requireApiKey } from '../middleware/apiKeyAuth.js';
 export const apiRouter = Router();
 // Initialize services
 const sessionService = new SessionService();
@@ -182,8 +183,8 @@ apiRouter.get('/logs/:sessionId', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch logs' });
     }
 });
-// POST /api/sessions/start - Manually start a new session
-apiRouter.post('/sessions/start', async (req, res) => {
+// POST /api/sessions/start - Manually start a new session (protected with API key)
+apiRouter.post('/sessions/start', requireApiKey, async (req, res) => {
     try {
         const sessionScheduler = req.app.get('sessionScheduler');
         if (!sessionScheduler) {
@@ -210,57 +211,6 @@ apiRouter.post('/sessions/start', async (req, res) => {
     catch (error) {
         console.error('Error starting session:', error);
         res.status(500).json({ error: 'Failed to start session' });
-    }
-});
-// POST /api/sessions/pause - Pause current session
-apiRouter.post('/sessions/pause', async (req, res) => {
-    try {
-        const sessionScheduler = req.app.get('sessionScheduler');
-        if (!sessionScheduler) {
-            return res.status(500).json({ error: 'Session scheduler not available' });
-        }
-        sessionScheduler.pauseSession();
-        res.json({
-            success: true,
-            message: 'Session paused'
-        });
-    }
-    catch (error) {
-        console.error('Error pausing session:', error);
-        res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to pause session' });
-    }
-});
-// POST /api/sessions/resume - Resume current session
-apiRouter.post('/sessions/resume', async (req, res) => {
-    try {
-        const sessionScheduler = req.app.get('sessionScheduler');
-        if (!sessionScheduler) {
-            return res.status(500).json({ error: 'Session scheduler not available' });
-        }
-        await sessionScheduler.resumeSession();
-        res.json({
-            success: true,
-            message: 'Session resumed'
-        });
-    }
-    catch (error) {
-        console.error('Error resuming session:', error);
-        res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to resume session' });
-    }
-});
-// GET /api/sessions/pause-status - Get pause status
-apiRouter.get('/sessions/pause-status', async (req, res) => {
-    try {
-        const sessionScheduler = req.app.get('sessionScheduler');
-        if (!sessionScheduler) {
-            return res.status(500).json({ error: 'Session scheduler not available' });
-        }
-        const isPaused = sessionScheduler.getIsPaused();
-        res.json({ isPaused });
-    }
-    catch (error) {
-        console.error('Error getting pause status:', error);
-        res.status(500).json({ error: 'Failed to get pause status' });
     }
 });
 // POST /api/agents/comparison - Compare multiple agents

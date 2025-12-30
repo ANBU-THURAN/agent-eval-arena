@@ -3,8 +3,6 @@ export var WSEventType;
 (function (WSEventType) {
     WSEventType["COUNTDOWN_TICK"] = "countdown_tick";
     WSEventType["SESSION_STATUS"] = "session_status";
-    WSEventType["SESSION_PAUSED"] = "session_paused";
-    WSEventType["SESSION_RESUMED"] = "session_resumed";
     WSEventType["ROUND_START"] = "round_start";
     WSEventType["PROPOSAL_CREATED"] = "proposal_created";
     WSEventType["TRADE_EXECUTED"] = "trade_executed";
@@ -14,8 +12,18 @@ export class WebSocketServer {
     wss;
     clients = new Set();
     sessionScheduler = null;
+    // Define allowed origins for WebSocket
+    allowedOrigins = [
+        'http://localhost:5173',
+        'https://skillful-cat-production.up.railway.app',
+        'https://agent-eval-arena-production.up.railway.app',
+    ];
     constructor(server) {
-        this.wss = new WSServer({ server, path: '/ws' });
+        this.wss = new WSServer({
+            server,
+            path: '/ws',
+            verifyClient: (info) => this.verifyClient(info),
+        });
         this.wss.on('connection', (ws) => {
             console.log('New WebSocket client connected');
             this.clients.add(ws);
@@ -44,6 +52,18 @@ export class WebSocketServer {
             }
         });
         console.log('WebSocket server initialized');
+    }
+    verifyClient(info) {
+        const origin = info.origin || info.req.headers.origin;
+        // Allow connections with no origin (for testing)
+        if (!origin)
+            return true;
+        // Check if origin is in allowed list
+        if (this.allowedOrigins.includes(origin)) {
+            return true;
+        }
+        console.warn(`WebSocket connection rejected from origin: ${origin}`);
+        return false;
     }
     setSessionScheduler(scheduler) {
         this.sessionScheduler = scheduler;
@@ -98,18 +118,6 @@ export class WebSocketServer {
         this.broadcast({
             type: WSEventType.AGENT_STATE_UPDATE,
             payload: { agentId, state },
-        });
-    }
-    broadcastSessionPaused() {
-        this.broadcast({
-            type: WSEventType.SESSION_PAUSED,
-            payload: {},
-        });
-    }
-    broadcastSessionResumed() {
-        this.broadcast({
-            type: WSEventType.SESSION_RESUMED,
-            payload: {},
         });
     }
     getClientCount() {

@@ -4,26 +4,30 @@ import { AppError } from '../errors/index.js';
  * Catches all errors and sends appropriate HTTP responses
  */
 export function errorHandler(err, req, res, next) {
+    // ✅ ADD CORS HEADERS FIRST
+    const origin = req.headers.origin;
+    if (origin) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     // Default to 500 Internal Server Error
     let statusCode = 500;
     let message = 'Internal Server Error';
     let isOperational = false;
-    // If it's our custom AppError, use its properties
     if (err instanceof AppError) {
         statusCode = err.statusCode;
         message = err.message;
         isOperational = err.isOperational;
     }
     else if (err.name === 'ValidationError') {
-        // Handle other validation errors
         statusCode = 400;
         message = err.message;
     }
     else if (err.message) {
-        // Use the error message if available
         message = err.message;
     }
-    // Log error details (in production, use a proper logger like Winston)
     if (!isOperational || statusCode >= 500) {
         console.error('Error:', {
             name: err.name,
@@ -35,14 +39,9 @@ export function errorHandler(err, req, res, next) {
         });
     }
     else {
-        // Operational errors (4xx) - less verbose logging
         console.warn(`${req.method} ${req.path} - ${statusCode}: ${message}`);
     }
-    // Send error response
-    const response = {
-        error: message,
-    };
-    // Include stack trace in development mode
+    const response = { error: message };
     if (process.env.NODE_ENV === 'development' && err.stack) {
         response.stack = err.stack;
     }

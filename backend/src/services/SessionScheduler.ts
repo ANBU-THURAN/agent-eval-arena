@@ -316,9 +316,6 @@ export class SessionScheduler {
       this.sessionEndTimeout = null;
     }
 
-    // Broadcast pause event
-    this.wsServer.broadcastSessionPaused();
-
     console.log('Session paused');
   }
 
@@ -386,9 +383,6 @@ export class SessionScheduler {
 
     // Clear paused time remaining
     this.pausedTimeRemaining = null;
-
-    // Broadcast resume event
-    this.wsServer.broadcastSessionResumed();
 
     console.log('Session resumed');
   }

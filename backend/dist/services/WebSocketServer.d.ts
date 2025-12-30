@@ -2,8 +2,6 @@ import { Server as HTTPServer } from 'http';
 export declare enum WSEventType {
     COUNTDOWN_TICK = "countdown_tick",
     SESSION_STATUS = "session_status",
-    SESSION_PAUSED = "session_paused",
-    SESSION_RESUMED = "session_resumed",
     ROUND_START = "round_start",
     PROPOSAL_CREATED = "proposal_created",
     TRADE_EXECUTED = "trade_executed",
@@ -23,10 +21,13 @@ export interface RoundStartPayload {
 }
 export interface ProposalPayload {
     id: string;
-    roundId: string;
-    fromAgentId: string;
-    toAgentId: string;
-    goodId: string;
+    roundId?: string;
+    fromAgentId?: string;
+    toAgentId?: string;
+    goodId?: string;
+    fromAgentName?: string;
+    toAgentName?: string;
+    goodName?: string;
     quantity: number;
     price: number;
     explanation: string;
@@ -35,14 +36,17 @@ export interface ProposalPayload {
 }
 export interface TradePayload {
     id: string;
-    proposalId: string;
-    sessionId: string;
-    fromAgentId: string;
-    toAgentId: string;
-    goodId: string;
+    proposalId?: string;
+    sessionId?: string;
+    fromAgentId?: string;
+    toAgentId?: string;
+    goodId?: string;
+    fromAgentName?: string;
+    toAgentName?: string;
+    goodName?: string;
     quantity: number;
     price: number;
-    settledAt: Date;
+    settledAt?: Date;
 }
 export interface AgentStatePayload {
     agentId: string;
@@ -65,7 +69,9 @@ export declare class WebSocketServer {
     private wss;
     private clients;
     private sessionScheduler;
+    private allowedOrigins;
     constructor(server: HTTPServer);
+    private verifyClient;
     setSessionScheduler(scheduler: ISessionScheduler): void;
     private sendToClient;
     broadcast(event: WSEvent): void;
@@ -80,8 +86,6 @@ export declare class WebSocketServer {
         tradesCompleted: number;
         tradesRequired: number;
     }): void;
-    broadcastSessionPaused(): void;
-    broadcastSessionResumed(): void;
     getClientCount(): number;
 }
 export {};

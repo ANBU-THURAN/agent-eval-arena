@@ -4,8 +4,6 @@ import { Server as HTTPServer, IncomingMessage } from 'http';
 export enum WSEventType {
   COUNTDOWN_TICK = 'countdown_tick',
   SESSION_STATUS = 'session_status',
-  SESSION_PAUSED = 'session_paused',
-  SESSION_RESUMED = 'session_resumed',
   ROUND_START = 'round_start',
   PROPOSAL_CREATED = 'proposal_created',
   TRADE_EXECUTED = 'trade_executed',
@@ -226,20 +224,6 @@ export class WebSocketServer {
     this.broadcast({
       type: WSEventType.AGENT_STATE_UPDATE,
       payload: { agentId, state },
-    });
-  }
-
-  broadcastSessionPaused() {
-    this.broadcast({
-      type: WSEventType.SESSION_PAUSED,
-      payload: {},
-    });
-  }
-
-  broadcastSessionResumed() {
-    this.broadcast({
-      type: WSEventType.SESSION_RESUMED,
-      payload: {},
     });
   }
 

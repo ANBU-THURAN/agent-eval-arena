@@ -182,7 +182,7 @@ export default function ChartsView() {
         setTradeVolumes(volumes);
 
         // Trading activity timeline (trades over time for latest session only)
-        const latestSession = completedSessions[completedSessions.length - 1];
+        const latestSession = completedSessions[completedSessions.length];
         const latestTradesResponse = await fetch(`${API_BASE_URL}/trades/${latestSession.id}`);
         const latestTrades: Trade[] = await latestTradesResponse.json();
 

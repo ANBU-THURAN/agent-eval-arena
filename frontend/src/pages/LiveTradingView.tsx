@@ -37,7 +37,6 @@ export default function LiveTradingView() {
   const [selectedAgentFilter, setSelectedAgentFilter] = useState<string | null>(null);
   const [filterMode, setFilterMode] = useState<'from' | 'to' | 'either'>('either');
   const [uniqueAgents, setUniqueAgents] = useState<Array<{name: string}>>([]);
-  const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -135,58 +134,6 @@ export default function LiveTradingView() {
     }
   };
 
-  const handleManualStart = async () => {
-    try {
-      console.log(`Backend url: ${API_BASE_URL}`);
-
-      const response = await fetch(`${API_BASE_URL}/sessions/start`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log('Session started:', data.sessionId);
-        setSessionStatus('active');
-
-        // Fetch initial data for the new session
-        fetchProposals(data.sessionId);
-        fetchAgents(data.sessionId);
-      } else {
-        console.error('Failed to start session:', data.error);
-        alert(data.error || 'Failed to start trading session');
-      }
-    } catch (error) {
-      console.error('Error starting session:', error);
-      alert('Failed to start trading session');
-    }
-  };
-
-  const handlePause = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/sessions/pause`, { method: 'POST' });
-      if (response.ok) {
-        setIsPaused(true);
-      }
-    } catch (error) {
-      console.error('Error pausing session:', error);
-    }
-  };
-
-  const handleResume = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/sessions/resume`, { method: 'POST' });
-      if (response.ok) {
-        setIsPaused(false);
-      }
-    } catch (error) {
-      console.error('Error resuming session:', error);
-    }
-  };
-
   const fetchProposals = async (sessionId: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/proposals/${sessionId}`);
@@ -210,14 +157,6 @@ export default function LiveTradingView() {
         } else if (message.payload.status === 'completed') {
           setSessionStatus('completed');
         }
-        break;
-
-      case 'session_paused':
-        setIsPaused(true);
-        break;
-
-      case 'session_resumed':
-        setIsPaused(false);
         break;
 
       case 'round_start':
@@ -272,30 +211,6 @@ export default function LiveTradingView() {
         <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-primary)', marginBottom: 'var(--space-lg)' }}>
           Waiting for session to start...
         </p>
-
-        <button
-          onClick={handleManualStart}
-          style={{
-            backgroundColor: 'var(--color-primary)',
-            color: 'var(--bg-primary)',
-            padding: 'var(--space-sm) var(--space-md)',
-            fontSize: 'var(--font-size-primary)',
-            fontWeight: 600,
-            border: 'none',
-            borderRadius: 'var(--border-radius)',
-            cursor: 'pointer',
-            marginBottom: 'var(--space-lg)',
-            transition: 'background-color var(--transition)',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--color-primary-light)';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--color-primary)';
-          }}
-        >
-          Start Trading Now
-        </button>
 
         {countdown && (
           <div style={{ fontSize: 'var(--font-size-header)', fontWeight: 600, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
@@ -440,49 +355,11 @@ export default function LiveTradingView() {
           <h2 style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600 }}>Live Trading Session</h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>Round {roundNumber}</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
-          {isPaused && (
-            <div
-              style={{
-                backgroundColor: 'var(--semantic-error)',
-                color: 'var(--text-primary)',
-                padding: 'var(--space-xs) var(--space-sm)',
-                borderRadius: 'var(--border-radius)',
-                fontWeight: 600,
-                fontSize: 'var(--font-size-secondary)',
-              }}
-            >
-              PAUSED
-            </div>
-          )}
-          <button
-            onClick={isPaused ? handleResume : handlePause}
-            style={{
-              padding: 'var(--space-xs) var(--space-sm)',
-              fontSize: 'var(--font-size-secondary)',
-              fontWeight: 600,
-              backgroundColor: isPaused ? 'var(--semantic-success)' : 'var(--color-primary)',
-              color: isPaused ? 'var(--text-primary)' : 'var(--bg-primary)',
-              border: 'none',
-              borderRadius: 'var(--border-radius)',
-              cursor: 'pointer',
-              transition: 'opacity var(--transition)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = '0.8';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = '1';
-            }}
-          >
-            {isPaused ? 'Resume' : 'Pause'}
-          </button>
-          <div style={{ textAlign: 'right' }}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>Time Remaining</p>
-            <p style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
-              {countdown || '--:--'}
-            </p>
-          </div>
+        <div style={{ textAlign: 'right' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-secondary)' }}>Time Remaining</p>
+          <p style={{ fontSize: 'var(--font-size-primary)', fontWeight: 600, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
+            {countdown || '--:--'}
+          </p>
         </div>
       </div>
 
