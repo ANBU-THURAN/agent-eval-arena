@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 // Configure CORS with explicit origins
 const allowedOrigins = [
   'http://localhost:5173',                                    // Local development
-  'https://skillful-cat-production.up.railway.app',          // Production frontend
+  'https://agent-eval.up.railway.app',          // Production frontend
   'https://agent-eval-arena-production.up.railway.app',      // Backend (for testing)
 ];
 

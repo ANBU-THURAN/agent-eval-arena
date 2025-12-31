@@ -95,7 +95,7 @@ export class WebSocketServer {
   // Define allowed origins for WebSocket
   private allowedOrigins = [
     'http://localhost:5173',
-    'https://skillful-cat-production.up.railway.app',
+    'https://agent-eval.up.railway.app',
     'https://agent-eval-arena-production.up.railway.app',
   ];
 
