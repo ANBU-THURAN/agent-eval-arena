@@ -5,6 +5,7 @@ export default {
   out: './drizzle',
   driver: 'turso',
   dbCredentials: {
-    url: `file:${process.env.DATABASE_PATH || './data/arena.db'}`,
+    url: process.env.DATABASE_URL || 'file:./data/arena.db',
+    authToken: process.env.DATABASE_AUTH_TOKEN,
   },
 } satisfies Config;

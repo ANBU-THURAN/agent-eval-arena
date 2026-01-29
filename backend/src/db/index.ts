@@ -1,20 +1,26 @@
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
-import { schema } from './schema/index.js';
+import { schema } from './schema';
 import { dirname } from 'path';
 import { mkdirSync, existsSync } from 'fs';
 
-const databasePath = process.env.DATABASE_PATH || 'libsql://agent-eval-anbu-thuran.aws-ap-south-1.turso.io';
+const databaseUrl = process.env.DATABASE_URL || 'file:./data/arena.db';
+const authToken = process.env.DATABASE_AUTH_TOKEN;
 
-// Ensure database directory exists
-const dbDir = dirname(databasePath);
-if (!existsSync(dbDir)) {
-  mkdirSync(dbDir, { recursive: true });
-  console.log(`Created database directory: ${dbDir}`);
+// Only create directory for local file databases
+if (databaseUrl.startsWith('file:')) {
+  const dbPath = databaseUrl.replace('file:', '');
+  const dbDir = dirname(dbPath);
+  if (!existsSync(dbDir)) {
+    mkdirSync(dbDir, { recursive: true });
+    console.log(`Created database directory: ${dbDir}`);
+  }
 }
 
+
 const sqlite = createClient({
-  url: `file:${databasePath}`
+  url: databaseUrl,
+  authToken: authToken
 });
 
 export const db = drizzle(sqlite, { schema });
