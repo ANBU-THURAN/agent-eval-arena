@@ -4,7 +4,7 @@ import { schema } from './schema/index.js';
 import { dirname } from 'path';
 import { mkdirSync, existsSync } from 'fs';
 
-const databasePath = process.env.DATABASE_PATH || './data/arena.db';
+const databasePath = process.env.DATABASE_PATH || 'libsql://agent-eval-anbu-thuran.aws-ap-south-1.turso.io';
 
 // Ensure database directory exists
 const dbDir = dirname(databasePath);
